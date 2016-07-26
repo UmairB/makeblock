@@ -1,0 +1,8 @@
+.sass-cache/
+.vs/
+artifacts/
+node_modules/
+bower_components/
+typings/
+**/*.js
+**/*.js.map
