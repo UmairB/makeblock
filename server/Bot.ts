@@ -38,8 +38,8 @@ class Motor {
         this.bot = bot;
     }
 
-    stop() {
-        this.bot.dcMotorStop();
+    stop(port: number) {
+        this.bot.dcMotorStop(port);
     }
 
     run(port: number, speed: number) {
