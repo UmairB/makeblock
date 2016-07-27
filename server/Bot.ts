@@ -1,3 +1,4 @@
+import { IMotorConfig } from '../Config';
 let MegaPi = require("megapi").MegaPi;
 
 export class Bot {
@@ -18,6 +19,11 @@ export class Bot {
 
         this._motor = new Motor(this.bot);
         this._ultrasonicSensor = new UltrasonicSensor(this.bot);
+    }
+
+    reset(motorConfig: IMotorConfig) {
+        this.motor.stop(motorConfig.left.port);
+        this.motor.stop(motorConfig.right.port);
     }
 }
 

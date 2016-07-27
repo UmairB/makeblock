@@ -1,25 +1,33 @@
-interface Config {
-    webServer: {
+export interface IConfig {
+    webServer: IWebServerConfig,
+    bot: IBotConfig
+}
+
+export interface IWebServerConfig {
+    port: number
+}
+
+export interface IBotConfig {
+    port: string,
+    ultrasonicSensor: IUltrasonicSensorConfig,
+    motor: IMotorConfig
+}
+
+export interface IUltrasonicSensorConfig {
+    port: number
+}
+
+export interface IMotorConfig {
+    left: {
         port: number
     },
-    bot: {
-        port: string,
-        ultrasonicSensor: {
-            port: number
-        },
-        motor: {
-            left: {
-                port: number
-            },
-            right: {
-                port: number
-            }
-        }
+    right: {
+        port: number
     }
 }
 
 //port: COM3,/dev/ttyUSB0
-export const Config = <Config>{
+export const Config = <IConfig>{
     "webServer": {
         "port": 8000 
     },

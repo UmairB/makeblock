@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "megapi": "^0.1.3",
     "express": "*",
-    "nipplejs": "*"
+    "megapi": "^0.1.3",
+    "nipplejs": "*",
+    "socket.io": "^1.4.8"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
