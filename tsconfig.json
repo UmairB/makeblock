@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "commonjs",
+        "noImplicitAny": false,
         "noEmitOnError": true,
-        "noImplicitAny": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "target": "es5",
+        "module": "commonjs",
         "experimentalDecorators": true,
-        "sourceMap": true                
+        "emitDecoratorMetadata": true         
     },
     "exclude": [
         "node_modules"
