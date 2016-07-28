@@ -5,6 +5,10 @@
             "when": "$(basename).ts"
         },
         "/**/*.js.map": true,
+        "/**/*.css": {
+            "when": "$(basename).scss"
+        },
+        "/**/*.css.map": true,
         "node_modules": true,
         "python": true
     }

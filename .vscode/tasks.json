@@ -5,5 +5,11 @@
     "command": "gulp",
     "isShellCommand": true,
     "args": ["--no-color"],
-    "showOutput": "always"
+    "tasks": [
+        {
+            "taskName": "build",
+            "showOutput": "always",
+            "isBuildCommand": true
+        }
+    ]
 }

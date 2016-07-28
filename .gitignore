@@ -4,6 +4,9 @@ artifacts/
 node_modules/
 bower_components/
 typings/
+wwwroot/lib
 **/*.js
 !**/gulpfile.js
 **/*.js.map
+**/*.css
+**/*.css.map
