@@ -9,7 +9,6 @@
             "when": "$(basename).scss"
         },
         "/**/*.css.map": true,
-        "node_modules": true,
-        "python": true
+        "node_modules": true
     }
 }

@@ -1,6 +1,8 @@
 export interface IConfig {
     webServer: IWebServerConfig,
-    bot: IBotConfig
+    bot: IBotConfig,
+    event: IEventConfig,
+    joystick: IJoystickConfig
 }
 
 export interface IWebServerConfig {
@@ -27,6 +29,22 @@ export interface IMotorConfig {
     }
 }
 
+export interface IEventConfig {
+    ultrasonicSensor: {
+        interval: number
+    }
+}
+
+export interface IJoystickConfig {
+    radius: number,
+    angleThreshold: number,
+    radialThreshold: number
+}
+
+export interface IClientConfig {
+    joystick: IJoystickConfig
+}
+
 //port: COM3,/dev/ttyUSB0
 export const Config = <IConfig>{
     "webServer": {
@@ -35,10 +53,20 @@ export const Config = <IConfig>{
     },
     "bot": {
         "port": "COM3",
-        "ultrasonicSensor": { port:3 },
+        "ultrasonicSensor": { port: 3 },
         "motor": {
             "left": { port: 9 },
             "right": { port: 10 }
         }
+    },
+    "event": {
+        "ultrasonicSensor": {
+            "interval": 1000
+        }
+    },
+    "joystick": {
+        "radius": 60,
+        "angleThreshold": 15,
+        "radialThreshold": 5
     }
 };

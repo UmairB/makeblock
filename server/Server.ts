@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
-import { Config } from '../Config';
+import { Config, IClientConfig } from '../Config';
 import { Socket } from './Socket';
 import { Bot } from './Bot';
 
@@ -16,17 +16,32 @@ export class Server {
         bot = new Bot(Config.bot.port, this.onBotInit);
     }
 
-    initRoutes() {
+    public initRoutes() {
         app.use(express.static(path.resolve(__dirname,  `../${Config.webServer.root}`)));
+        
+        let apiRouter = express.Router();
+        apiRouter.get('/config\.:ext?', function(req, res) {
+            let clientConfig = <IClientConfig>{
+                joystick: Config.joystick
+            };
+
+            if (req.params.ext === "js") {
+                res.header("Content-Type", "application/javascript");
+                res.send(`exports.config = ${JSON.stringify(clientConfig)};`);
+            } else if (req.params.ext === "json" || !req.params.ext) {
+                res.header("Content-Type", "application/json; charset=utf-8");
+                res.send(clientConfig);
+            } else {
+                // HTTP status 404: NotFound
+                res.status(404)
+                   .send('Not found');
+            }
+        });
+
+        app.use('/api', apiRouter);
     }
 
-    initSockets() {
-        if (socket) {
-            socket.initSockets();
-        }
-    }
-
-    start(port: number, onStart: (address: string, port: number) => void = null) {
+    public start(port: number, onStart: (address: string, port: number) => void = null) {
         server = app.listen(port, () => {
             if (onStart !== null) {
                 var addr = server.address();
@@ -35,9 +50,10 @@ export class Server {
         });
 
         socket = new Socket(server, bot);
+        socket.initSockets();
     }
 
-    stop(onClose: () => void = null) {
+    public stop(onClose: () => void = null) {
         server.close(() => {
             if (onClose !== null) {
                 onClose();

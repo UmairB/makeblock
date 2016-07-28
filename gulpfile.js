@@ -14,6 +14,7 @@ var paths = {
 paths.lib = paths.webroot + 'lib/';
 paths.app = paths.webroot + "app/";
 paths.sass = paths.app + "**/*.scss";
+paths.typescript = "./**/*.ts";
 
 var libs = {
     'es6-shim': {
@@ -60,6 +61,12 @@ gulp.task('build:sass', function () {
         //.pipe(cssmin())
         .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '/app' }))
         .pipe(gulp.dest(function (file) { return file.base; }));
+});
+
+// watch task
+gulp.task('watch', function () {
+    gulp.watch(paths.sass, ['build:sass']);
+    gulp.watch(paths.typescript, ['build:typescript']);
 });
 
 gulp.task('build', ['build:typescript', 'build:sass']);

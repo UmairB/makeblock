@@ -5,7 +5,6 @@ import { Server } from './server/Server';
 
 let server = new Server();
 server.initRoutes();
-server.initSockets();
 
 server.start(Config.webServer.port, (address, port) => {
     console.log(`server listening at ${address}":"${port}`);
