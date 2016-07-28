@@ -17,7 +17,7 @@ export class Server {
     }
 
     initRoutes() {
-        app.use(express.static(path.resolve(__dirname, '../www')));
+        app.use(express.static(path.resolve(__dirname,  `../${Config.webServer.root}`)));
     }
 
     initSockets() {
@@ -26,18 +26,22 @@ export class Server {
         }
     }
 
-    start(port: number) {
+    start(port: number, onStart: (address: string, port: number) => void = null) {
         server = app.listen(port, () => {
-            var addr = server.address();
-            console.log(`server listening at ${addr.address}":"${addr.port}`);
+            if (onStart !== null) {
+                var addr = server.address();
+                onStart(addr.address, addr.port);
+            }
         });
 
         socket = new Socket(server, bot);
     }
 
-    stop() {
+    stop(onClose: () => void = null) {
         server.close(() => {
-            console.log('Turning off server');
+            if (onClose !== null) {
+                onClose();
+            }
 
             socket.close();
             server.destroy();
