@@ -4,7 +4,8 @@ export interface IConfig {
 }
 
 export interface IWebServerConfig {
-    port: number
+    port: number,
+    root: string
 }
 
 export interface IBotConfig {
@@ -29,7 +30,8 @@ export interface IMotorConfig {
 //port: COM3,/dev/ttyUSB0
 export const Config = <IConfig>{
     "webServer": {
-        "port": 8000 
+        "port": 8000,
+        "root": "wwwroot"
     },
     "bot": {
         "port": "COM3",
