@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+
+    <link rel="stylesheet" href="/app/app.css" />
+
+    <script src="/lib/systemjs/system.js"></script>
+    <script>
+        System.config({
+            defaultJSExtensions: true,
+            map: {
+                'nipplejs': '/lib/nipplejs/nipplejs.js'
+            },
+            meta: {
+                'nipplejs': {
+                    format: 'global'
+                }
+            }
+        });
+    </script>
+    <script src="/lib/es6-shim/es6-shim.js"></script>
+    <script>
+        Promise.all([
+            System.import('app/app')
+        ]).catch(console.error.bind(console));
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="joystick">
+        </div>
+    </div>
+</body>
+</html>
