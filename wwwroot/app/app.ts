@@ -25,18 +25,18 @@ class App {
 
     private initJoystick() {
         let joystickElement = this.containerElement.querySelector(this.options.joystickSelector);
-        
+
         this.joystick = new Joystick(joystickElement, this.options.joystickOptions);
 
         this.joystick.onMove((radialDistance, angle) => {
-            console.log('moved');
+            this.socket.emit('joystick move', { radialDistance, angle });
         });
 
         this.joystick.onEnd(() => {
-            console.log('reset');
+            this.socket.emit('joystick reset');
         });
     }
-    
+
     private initSockets() {
         this.socket = io();
 
@@ -53,15 +53,11 @@ Promise.all([
     System.import('nipplejs')
 ]).then((args) => {
     let config = args[0].config;
-    
+
     new App({
         container: '.container',
         joystickSelector: '.joystick',
         sensorDistanceSelector: '.sensor-distance .distance',
-        joystickOptions: {
-            angleThreshold: config.joystick.angleThreshold,
-            radialThreshold: config.joystick.radialThreshold,
-            radius: config.joystick.radius
-        }
+        joystickOptions: <IJoystickOptions>config.joystick
     });
 });

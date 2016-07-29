@@ -11,3 +11,6 @@ To setup typescript and node, see
     http://brianflove.com/2016/03/29/typescript-express-node-js/
 and
     http://ramachandrang.com/2016/04/23/express-angular2-application-using-typescript-server-setup.html
+
+# DC Motors
+DC Motors have values in the range 255 to -255

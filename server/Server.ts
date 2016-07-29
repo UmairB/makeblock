@@ -70,6 +70,6 @@ export class Server {
     }
 
     private onBotInit() {
-        bot.reset(Config.bot.motor);
+        bot.motor.reset(Config.bot.motor);
     }
 }

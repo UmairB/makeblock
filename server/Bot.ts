@@ -20,35 +20,37 @@ export class Bot {
         this._motor = new Motor(this.bot);
         this._ultrasonicSensor = new UltrasonicSensor(this.bot);
     }
-
-    reset(motorConfig: IMotorConfig) {
-        this.motor.stop(motorConfig.left.port);
-        this.motor.stop(motorConfig.right.port);
-    }
 }
 
 class UltrasonicSensor {
     private bot: any;
+
     constructor(bot: any) {
         this.bot = bot;
     }
 
-    read(port: number, onRead: (value: number) => void) {
+    public read(port: number, onRead: (value: number) => void) {
         this.bot.ultrasonicSensorRead(port, onRead);
     }
 }
 
 class Motor {
     private bot: any;
+
     constructor(bot: any) {
         this.bot = bot;
     }
 
-    stop(port: number) {
+    public stop(port: number) {
         this.bot.dcMotorStop(port);
     }
 
-    run(port: number, speed: number) {
+    public run(port: number, speed: number) {
         this.bot.dcMotorRun(port, speed);
+    }
+
+    public reset(motorConfig: IMotorConfig) {
+        this.stop(motorConfig.left.port);
+        this.stop(motorConfig.right.port);
     }
 }
