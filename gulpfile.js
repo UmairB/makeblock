@@ -1,10 +1,11 @@
 "use strict";
 
-var gulp = require('gulp'),
-    path = require('path'),
-    ts = require('gulp-typescript'),
-    sass = require("gulp-sass"),
-    sourcemaps = require('gulp-sourcemaps');
+const gulp = require('gulp'),
+      path = require('path'),
+      ts = require('gulp-typescript'),
+      sass = require("gulp-sass"),
+      sourcemaps = require('gulp-sourcemaps'),
+      jasmine = require('gulp-jasmine');
 
 var paths = {
     webroot: "./wwwroot/",
@@ -15,6 +16,9 @@ paths.lib = paths.webroot + 'lib/';
 paths.app = paths.webroot + "app/";
 paths.sass = paths.app + "**/*.scss";
 paths.typescript = "./**/*.ts";
+paths.ignore = {
+    npm: '!' + paths.npm + '/**'
+};
 
 var libs = {
     'es6-shim': {
@@ -63,11 +67,23 @@ gulp.task('build:sass', function () {
         .pipe(gulp.dest(function (file) { return file.base; }));
 });
 
+// jasmine tests
+gulp.task('jasmine', ['build:typescript'], function () {
+    return gulp.src(['./**/*.spec.js', paths.ignore.npm])
+        // gulp-jasmine works on filepaths so you can't have any plugins before it
+        .pipe(jasmine());
+});
+
 // watch task
 gulp.task('watch', function () {
     gulp.watch(paths.sass, ['build:sass']);
-    gulp.watch(paths.typescript, ['build:typescript']);
+    gulp.watch([paths.typescript, paths.ignore.npm], ['build:typescript']);
+});
+// watch jasmine
+gulp.task('watch:jasmine', function () {
+    gulp.watch([paths.typescript, paths.ignore.npm], ['jasmine']);
 });
 
 gulp.task('build', ['build:typescript', 'build:sass']);
+
 gulp.task('default', ['build']);

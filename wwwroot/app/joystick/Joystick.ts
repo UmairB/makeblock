@@ -14,15 +14,14 @@ export class Joystick {
 
     public onMove(onMove: (radialDistance, angle) => void) {
         let angleThreshold = this.options.angleThreshold,
-            angleThresholdRad = angleThreshold * (Math.PI / 180),
             radialThreshold = this.options.radialThreshold;
 
         let currentValue = { angle: 0, distance: 0 };
         this.joystick.on('move', (obj, data) => {
-            let angle = data.angle.radian,
+            let angle = data.angle.degree,
                 radialDistance = data.distance;
 
-            let tAngle = Math.floor(angle / angleThresholdRad) * angleThresholdRad;
+            let tAngle = Math.floor(angle / angleThreshold) * angleThreshold;
             let tDis = Math.floor(radialDistance / radialThreshold) * radialThreshold;
 
             if (currentValue.angle !== tAngle || currentValue.distance !== tDis) {

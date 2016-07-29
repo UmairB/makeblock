@@ -21,6 +21,7 @@ export interface IUltrasonicSensorConfig {
 }
 
 export interface IMotorConfig {
+    maxPowerValue: number,
     left: {
         port: number
     },
@@ -52,9 +53,10 @@ export const Config = <IConfig>{
         "root": "wwwroot"
     },
     "bot": {
-        "port": "COM3",
+        "port": "COM4",
         "ultrasonicSensor": { port: 3 },
         "motor": {
+            "maxPowerValue": 255, 
             "left": { port: 9 },
             "right": { port: 10 }
         }
@@ -66,7 +68,7 @@ export const Config = <IConfig>{
     },
     "joystick": {
         "radius": 60,
-        "angleThreshold": 15,
+        "angleThreshold": 45,
         "radialThreshold": 5
     }
 };

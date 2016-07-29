@@ -26,7 +26,9 @@ export class Socket {
 
         // setup the distance event emitter
         this.sensorDistanceInterval = setInterval(() => {
-            this.io.emit('sensor distance', { distance: (Math.random() * 100).toFixed(2) + "cm" });
+            this.bot.ultrasonicSensor.read(Config.bot.ultrasonicSensor.port, (distance) => {
+                this.io.emit('sensor distance', { distance: `${distance.toFixed(2)}cm` });
+            });
         }, Config.event.ultrasonicSensor.interval);
     }
 
@@ -44,9 +46,11 @@ export class Socket {
 
         socket.on('joystick move', (value: IJoystickValues) => {
             if (this.currentClientId === socket.client.id) {
-                let motorValues = this.botService.CalculateMotorValues(value, Config.joystick);
-                this.bot.motor.run(Config.bot.motor.left.port, motorValues.left);
-                this.bot.motor.run(Config.bot.motor.right.port, motorValues.right);
+                let motorValues = this.botService.CalculateMotorValues(value);
+                if (motorValues) {
+                    this.bot.motor.run(Config.bot.motor.left.port, motorValues.left);
+                    this.bot.motor.run(Config.bot.motor.right.port, motorValues.right);
+                }
             }
         });
 
