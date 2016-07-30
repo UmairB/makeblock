@@ -12,6 +12,7 @@ export interface IWebServerConfig {
 
 export interface IBotConfig {
     port: string,
+    baudrate: number,
     ultrasonicSensor: IUltrasonicSensorConfig,
     motor: IMotorConfig
 }
@@ -54,6 +55,7 @@ export const Config = <IConfig>{
     },
     "bot": {
         "port": "COM4",
+        "baudrate": 115200,
         "ultrasonicSensor": { port: 3 },
         "motor": {
             "maxPowerValue": 255, 
