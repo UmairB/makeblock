@@ -3,8 +3,7 @@
 import * as socket from 'socket.io';
 import * as http from 'http';
 import { Config } from '../Config';
-import { Bot } from './Bot';
-import { BotService } from './BotService';
+import { Bot, BotService } from './bot/module';
 import { IJoystickValues, IMotorValues } from './model/module';
 
 export class Socket {

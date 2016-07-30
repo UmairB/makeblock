@@ -1,8 +1,8 @@
-///<reference path="../typings/globals/jasmine/index.d.ts" />
+///<reference path="../../typings/globals/jasmine/index.d.ts" />
 
 import { BotService } from './BotService';
-import { IJoystickValues } from './model/module';
-import { Config } from '../Config';
+import { IJoystickValues } from '../model/module';
+import { Config } from '../../Config';
 
 describe("BotService spec", () => {
     let botService = new BotService();

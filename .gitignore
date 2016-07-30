@@ -3,6 +3,7 @@
 artifacts/
 node_modules/
 bower_components/
+logs/
 typings/
 wwwroot/lib
 **/*.js

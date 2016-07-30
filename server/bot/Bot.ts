@@ -1,4 +1,4 @@
-import { IMotorConfig } from '../Config';
+import { IMotorConfig } from '../../Config';
 let MegaPi = require("megapi").MegaPi;
 
 export class Bot {

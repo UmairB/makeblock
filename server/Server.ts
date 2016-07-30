@@ -3,7 +3,8 @@ import * as http from 'http';
 import * as path from 'path';
 import { Config, IClientConfig } from '../Config';
 import { Socket } from './Socket';
-import { Bot } from './Bot';
+import { Bot } from './bot/Bot';
+import { logger } from './log/Logger';
 
 let app: express.Express;
 let server: http.Server;
@@ -13,7 +14,6 @@ let bot: Bot;
 export class Server {
     constructor() {
         app = express();
-        bot = new Bot(Config.bot.port, this.onBotInit);
     }
 
     public initRoutes() {
@@ -41,7 +41,20 @@ export class Server {
         app.use('/api', apiRouter);
     }
 
-    public start(port: number, onStart: (address: string, port: number) => void = null) {
+    public start(port: number, onStart: (address: string, port: number) => void = null, onError: (err: Error) => void = null) {
+        try {
+            bot = new Bot(Config.bot.port, this.onBotInit);
+        } catch (e) {
+            let err = <Error>e;
+            logger.exception('Error initializing bot', err);
+
+            if (onError !== null) {
+                onError(err);
+            }
+
+            return;
+        }
+
         server = app.listen(port, () => {
             if (onStart !== null) {
                 var addr = server.address();
@@ -54,6 +67,11 @@ export class Server {
     }
 
     public stop(onClose: () => void = null) {
+        if (!server) {
+            onClose();
+            return;
+        }
+
         server.close(() => {
             if (onClose !== null) {
                 onClose();

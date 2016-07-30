@@ -1,4 +1,18 @@
 import * as winston from 'winston';
+import * as path from 'path';
+import * as fs from 'fs';
+require('winston-daily-rotate-file'); // set up so that DailyRotateFile is available on winston.transports
+
+// make sure log folder exists
+let logFolder = './logs';
+try {
+    fs.mkdirSync(logFolder);
+}
+catch (e) {
+    if (e.code !== 'EEXIST') {
+        throw e;
+    }
+}
 
 export class Logger {
     private logger: winston.LoggerInstance;
@@ -6,10 +20,12 @@ export class Logger {
     constructor() {
         this.logger = new winston.Logger({
             transports: [
-                new winston.transports.File({
-                    filename: './logs/app.log',
+                new winston.transports.DailyRotateFile({
+                    filename: path.join(logFolder, "app.log"),
+                    datePattern: '.yyyy-MM-dd',
                     handleExceptions: true,
-                    humanReadableUnhandledException: true
+                    humanReadableUnhandledException: true,
+                    json: false
                 }),
                 new winston.transports.Console({
                     level: 'error',
@@ -32,6 +48,11 @@ export class Logger {
 
     public error(msg: string) {
         this.logger.error(msg);
+    }
+
+    public exception(msg: string, error: Error) {
+        let errorMsg = winston.exception.getAllInfo(error);
+        this.logger.error(msg, errorMsg);
     }
 }
 

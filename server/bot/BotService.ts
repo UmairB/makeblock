@@ -1,5 +1,5 @@
-import { Config } from '../Config';
-import { IJoystickValues, IMotorValues } from './model/module';
+import { Config } from '../../Config';
+import { IJoystickValues, IMotorValues } from '../model/module';
 
 const joystickConfig = Config.joystick;
 const maxPowerValue = Config.bot.motor.maxPowerValue;
