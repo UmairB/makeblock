@@ -10,7 +10,8 @@
     "nipplejs": "*",
     "open": "0.0.5",
     "socket.io": "^1.4.8",
-    "systemjs": "^0.19.35"
+    "systemjs": "^0.19.35",
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
