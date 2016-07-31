@@ -1,8 +1,8 @@
-import { IMotorConfig } from '../../Config';
-let MegaPi = require("megapi").MegaPi;
+import { IMotorConfig, IBotConfig } from '../../Config';
+import { MakeblockApi } from '../api/MakeblockApi';
 
 export class Bot {
-    private bot: any;
+    private bot: MakeblockApi;
     private _motor: Motor;
     private _ultrasonicSensor: UltrasonicSensor;
 
@@ -14,28 +14,40 @@ export class Bot {
         return this._ultrasonicSensor;
     }
 
-    constructor(port: string, onStart: () => void) {
-        this.bot = new MegaPi(port, onStart);
+    constructor(config: IBotConfig) {
+        this.bot = new MakeblockApi({ 
+            port: config.port, 
+            baudrate: config.baudrate,
+            onPortError: (err) => console.log(err)
+        });
+    }
+
+    public initialize(callback: (err: Error) => void) {
+        this.bot.open(callback);
 
         this._motor = new Motor(this.bot);
         this._ultrasonicSensor = new UltrasonicSensor(this.bot);
     }
+
+    public shutdown(callback?: (err: Error) => void) {
+        this.bot.close(callback);
+    }
 }
 
 class UltrasonicSensor {
-    private bot: any;
+    private bot: MakeblockApi;
 
     constructor(bot: any) {
         this.bot = bot;
     }
 
-    public read(port: number, onRead: (value: number) => void) {
+    public read(port: number, onRead: (err: Error, value: number) => void) {
         this.bot.ultrasonicSensorRead(port, onRead);
     }
 }
 
 class Motor {
-    private bot: any;
+    private bot: MakeblockApi;
 
     constructor(bot: any) {
         this.bot = bot;

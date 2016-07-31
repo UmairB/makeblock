@@ -42,31 +42,27 @@ export class Server {
     }
 
     public start(port: number, onStart: (address: string, port: number) => void = null, onError: (err: Error) => void = null) {
-        try {
-            bot = new Bot(Config.bot.port, this.onBotInit);
-        } catch (e) {
-            let err = <Error>e;
-            logger.exception('Error initializing bot', err);
+        bot = new Bot(Config.bot);
+        bot.initialize((err: Error) => {
+            if (err) {
+                logger.exception(err, 'Error initializing bot');
 
-            if (onError !== null) {
-                onError(err);
+                if (onError !== null) {
+                    onError(err);
+                }
+
+                return;
             }
 
-            return;
-        }
+            this.onBotInit();
 
-        server = app.listen(port, () => {
-            if (onStart !== null) {
-                var addr = server.address();
-                onStart(addr.address, addr.port);
-            }
+            this.initServer(port, onStart);
         });
-
-        socket = new Socket(server, bot);
-        socket.initSockets();
     }
 
     public stop(onClose: () => void = null) {
+        bot.shutdown(logger.exception.bind(logger));
+
         if (!server) {
             onClose();
             return;
@@ -85,6 +81,18 @@ export class Server {
             socket = undefined;
             bot = undefined;
         });
+    }
+
+    private initServer(port: number, onStart: (address: string, port: number) => void = null) {
+        server = app.listen(port, () => {
+            if (onStart !== null) {
+                var addr = server.address();
+                onStart(addr.address, addr.port);
+            }
+        });
+
+        socket = new Socket(server, bot);
+        socket.initSockets();
     }
 
     private onBotInit() {

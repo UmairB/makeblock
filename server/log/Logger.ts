@@ -50,8 +50,10 @@ export class Logger {
         this.logger.error(msg);
     }
 
-    public exception(msg: string, error: Error) {
+    public exception(error: Error, msg?: string) {
         let errorMsg = winston.exception.getAllInfo(error);
+        msg = msg || 'An error occurred';
+        
         this.logger.error(msg, errorMsg);
     }
 }
