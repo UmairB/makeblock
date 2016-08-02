@@ -5,7 +5,7 @@ export class Joystick {
     private joystick;
 
     constructor(private joystickElement: Element, private options: IJoystickOptions) {
-        this.init();
+        this.initJoystick();
     }
 
     public onEnd(onEnd: () => void) {
@@ -13,27 +13,49 @@ export class Joystick {
     }
 
     public onMove(onMove: (radialDistance, angle) => void) {
-        let angleThreshold = this.options.angleThreshold,
-            radialThreshold = this.options.radialThreshold;
+        let radialThreshold = this.options.radialThreshold;
 
         let currentValue = { angle: 0, distance: 0 };
         this.joystick.on('move', (obj, data) => {
             let angle = data.angle.degree,
                 radialDistance = data.distance;
 
-            let tAngle = Math.floor(angle / angleThreshold) * angleThreshold;
+            let tAngle = this.calculateAngle(angle);
             let tDis = Math.floor(radialDistance / radialThreshold) * radialThreshold;
 
-            if (currentValue.angle !== tAngle || currentValue.distance !== tDis) {
+            if (typeof tAngle === "number" && (currentValue.angle !== tAngle || currentValue.distance !== tDis)) {
                 currentValue.angle = tAngle;
                 currentValue.distance = tDis;
+
+                console.log(currentValue);
 
                 onMove(currentValue.distance, currentValue.angle);
             }
         });
     }
 
-    private init() {
+    private calculateAngle(angle: number) : number {
+        let angleThreshold = this.options.angleThreshold;
+        if (360 % angleThreshold === 0) {
+            angleThreshold = 0;
+        }
+
+        // first check margins
+        while (angleThreshold <= 360) {
+            let diff = angle - angleThreshold;
+            if (Math.abs(diff) <= this.options.angleMargin) {
+                return angleThreshold === 360 ? 0 : angleThreshold;
+            }
+
+            angleThreshold += this.options.angleThreshold;
+        }
+
+        // // else just use the threshold
+        // angleThreshold = this.options.angleThreshold;
+        // return Math.floor(angle / angleThreshold) * angleThreshold;
+    }
+
+    private initJoystick() {
         this.joystick = nipplejs.create({
             zone: this.joystickElement,
             size: this.options.radius * 2,

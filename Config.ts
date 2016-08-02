@@ -40,6 +40,7 @@ export interface IEventConfig {
 export interface IJoystickConfig {
     radius: number,
     angleThreshold: number,
+    angleMargin: number,
     radialThreshold: number
 }
 
@@ -71,6 +72,7 @@ export const Config = <IConfig>{
     "joystick": {
         "radius": 60,
         "angleThreshold": 45,
+        "angleMargin": 20,
         "radialThreshold": 5
     }
 };

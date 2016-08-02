@@ -24,9 +24,17 @@ if (args[0] === "port-list") {
         open(`http://localhost:${port}`);
     });
 
-    process.on('exit', function () { 
+    let onExit = () => {
         server.stop(() => {
             logger.info('Turning off server');
         });
-    });
+    };
+
+    process.on('exit', onExit);
+
+    // //catches ctrl+c event
+    // process.on('SIGINT', onExit);
+
+    // //catches uncaught exceptions
+    // process.on('uncaughtException', onExit);
 }

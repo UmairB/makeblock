@@ -157,7 +157,7 @@ class DataParser {
     private responseValue(id: number, value: any) {
         let cb = this.callbacks["callback_" + id];
         if (cb) {
-            this.callbacks[id](value);
+            cb(value);
         }
     }
 }

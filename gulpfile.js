@@ -51,10 +51,10 @@ gulp.task('libs', function () {
 var tsProject = ts.createProject(path.resolve('./tsconfig.json'));
 gulp.task('build:typescript', function () {
     return tsProject.src()
-        .pipe(sourcemaps.init())
+        //.pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .js
-        .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '/' }))
+        //.pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '/' }))
         .pipe(gulp.dest(function (file) { return file.base; }));
 });
 
