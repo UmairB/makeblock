@@ -1,3 +1,6 @@
+@import "variables";
+@import "fonts/style";
+
 html {
     box-sizing: border-box;
 }
@@ -25,12 +28,51 @@ html, body {
     width: 100%;
     height: 100%;
     padding: 10px;
+    display: table;
+    > * {
+        display: table-row;
+    }
 }
 
 .sensor-distance {
     text-align: center;
 }
 
+.joystick-container, .joystick {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.bottom {
+    text-align: center;
+}
+
+.loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+    .ic-loading {
+        position: absolute;
+        top: 100px - $ic-icon-size;
+        left: 50%;
+        margin-left: -$ic-icon-size / 2; 
+        font-size: $ic-icon-size * 2;
+        animation: rotate 0.8s infinite linear;
+    }
+    &.show {
+        display: block;   
+    } 
+}
+
 *, *:before, *:after {
     box-sizing: inherit;
+}
+
+@keyframes rotate {
+    0%    { transform: rotate(0deg); }
+    100%  { transform: rotate(360deg); }
 }

@@ -27,8 +27,6 @@ export class Joystick {
                 currentValue.angle = tAngle;
                 currentValue.distance = tDis;
 
-                console.log(currentValue);
-
                 onMove(currentValue.distance, currentValue.angle);
             }
         });
@@ -63,5 +61,9 @@ export class Joystick {
             position: { left: '50%', top: '50%' },
             color: 'red'
         });
+
+        if (this.options.hideOnInit) {
+            this.joystick.get().hide();
+        }
     }
 }

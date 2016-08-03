@@ -1,0 +1,43 @@
+@import "variables";
+
+@font-face {
+  font-family: 'icomoon';
+  src:
+    url('#{$icomoon-font-path}/icomoon.ttf?26oeje') format('truetype'),
+    url('#{$icomoon-font-path}/icomoon.woff?26oeje') format('woff'),
+    url('#{$icomoon-font-path}/icomoon.svg?26oeje#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ic-"], [class*=" ic-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ic-loading-2 {
+  &:before {
+    content: $ic-loading-2;
+  }
+}
+.ic-loading-1 {
+  &:before {
+    content: $ic-loading-1;
+  }
+}
+.ic-loading {
+  &:before {
+    content: $ic-loading;
+  }
+}
+

@@ -53,11 +53,14 @@ Promise.all([
     System.import('nipplejs')
 ]).then((args) => {
     let config = args[0].config;
+    
+    let joystickOptions = <IJoystickOptions>config.joystick;
+    joystickOptions.hideOnInit = true;
 
     new App({
         container: '.container',
         joystickSelector: '.joystick',
         sensorDistanceSelector: '.sensor-distance .distance',
-        joystickOptions: <IJoystickOptions>config.joystick
+        joystickOptions: joystickOptions
     });
 });
