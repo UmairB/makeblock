@@ -1,4 +1,5 @@
 export interface IConfig {
+    botRequired: boolean,
     webServer: IWebServerConfig,
     bot: IBotConfig,
     event: IEventConfig,
@@ -50,6 +51,7 @@ export interface IClientConfig {
 
 //port: COM3,/dev/ttyUSB0
 export const Config = <IConfig>{
+    "botRequired": false,
     "webServer": {
         "port": 8000,
         "root": "wwwroot"

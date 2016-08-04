@@ -6,6 +6,10 @@ export class Bot {
     private _motor: Motor;
     private _ultrasonicSensor: UltrasonicSensor;
 
+    public get isInitialized() : boolean {
+        return this.bot.isOpen;
+    }
+
     public get motor() : Motor {
         return this._motor;
     }
@@ -29,8 +33,13 @@ export class Bot {
         this._ultrasonicSensor = new UltrasonicSensor(this.bot);
     }
 
-    public shutdown(callback?: (err: Error) => void) {
-        this.bot.close(callback);
+    public shutdown(callback?: (err: Error) => void) : boolean {
+        if (this.bot.isOpen) {
+            this.bot.close(callback);
+            return true;
+        }
+
+        return false;
     }
 }
 

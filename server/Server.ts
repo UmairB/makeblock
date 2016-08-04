@@ -51,10 +51,12 @@ export class Server {
                     onError(err);
                 }
 
-                return;
+                if (Config.botRequired) {
+                    return;
+                }
+            } else {
+                this.onBotInit();
             }
-
-            this.onBotInit();
 
             this.initServer(port, onStart);
         });

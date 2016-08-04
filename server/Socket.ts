@@ -24,11 +24,15 @@ export class Socket {
         this.io.on('connection', this.initEvents.bind(this));
 
         // setup the distance event emitter
-        this.sensorDistanceInterval = setInterval(() => {
-            this.bot.ultrasonicSensor.read(Config.bot.ultrasonicSensor.port, (err, distance) => {
-                this.io.emit('sensor distance', { distance: `${distance.toFixed(2)}cm` });
-            });
-        }, Config.event.ultrasonicSensor.interval);
+        if (this.bot.isInitialized) {
+            this.sensorDistanceInterval = setInterval(() => {
+                this.bot.ultrasonicSensor.read(Config.bot.ultrasonicSensor.port, (err, distance) => {
+                    if (typeof distance !== "undefined") {
+                        this.io.emit('sensor distance', { distance: `${distance.toFixed(2)}cm` });
+                    }
+                });
+            }, Config.event.ultrasonicSensor.interval);
+        }
     }
 
     public close() {
@@ -37,27 +41,29 @@ export class Socket {
             clearInterval(this.sensorDistanceInterval);
         }
     }
-    
+
     private initEvents(socket: SocketIO.Socket) {
         if (!this.currentClientId) {
             this.currentClientId = socket.client.id;
         }
 
-        socket.on('joystick move', (value: IJoystickValues) => {
-            if (this.currentClientId === socket.client.id) {
-                let motorValues = this.botService.CalculateMotorValues(value);
-                if (motorValues) {
-                    this.bot.motor.run(Config.bot.motor.left.port, motorValues.left);
-                    this.bot.motor.run(Config.bot.motor.right.port, motorValues.right);
+        if (this.bot.isInitialized) {
+            socket.on('joystick move', (value: IJoystickValues) => {
+                if (this.currentClientId === socket.client.id) {
+                    let motorValues = this.botService.CalculateMotorValues(value);
+                    if (motorValues) {
+                        this.bot.motor.run(Config.bot.motor.left.port, motorValues.left);
+                        this.bot.motor.run(Config.bot.motor.right.port, motorValues.right);
+                    }
                 }
-            }
-        });
+            });
 
-        socket.on('joystick reset', () => {
-            if (this.currentClientId === socket.client.id) {
-                this.bot.motor.reset(Config.bot.motor); 
-            }
-        });
+            socket.on('joystick reset', () => {
+                if (this.currentClientId === socket.client.id) {
+                    this.bot.motor.reset(Config.bot.motor);
+                }
+            });
+        }
 
         socket.on('disconnect', () => {
             this.currentClientId = null;
