@@ -1,8 +1,8 @@
 declare var System: any;
-declare var Promise: any;
 import * as io from 'socket.io-client';
 import { IJoystickOptions } from './joystick/IJoystickOptions';
 import { Joystick } from './joystick/Joystick';
+import * as angular from 'angular';
 
 interface IAppOptions {
     container: string,
@@ -48,19 +48,23 @@ class App {
     }
 }
 
-Promise.all([
-    System.import('/api/config'),
-    System.import('nipplejs')
-]).then((args) => {
-    let config = args[0].config;
-    
-    let joystickOptions = <IJoystickOptions>config.joystick;
-    joystickOptions.hideOnInit = true;
+System.import('config')
+    .then((config) => {
+        let joystickOptions = <IJoystickOptions>config.joystick;
+        joystickOptions.hideOnInit = true;
 
-    new App({
-        container: '.container',
-        joystickSelector: '.joystick',
-        sensorDistanceSelector: '.sensor-distance .distance',
-        joystickOptions: joystickOptions
+        new App({
+            container: '.container',
+            joystickSelector: '.joystick',
+            sensorDistanceSelector: '.sensor-distance .distance',
+            joystickOptions: joystickOptions
+        });
     });
+
+module app {
+    angular.module('app', []);
+}
+
+angular.element('document').ready(() => {
+    angular.bootstrap('document', ['app']);
 });

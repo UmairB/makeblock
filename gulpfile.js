@@ -36,6 +36,11 @@ var libs = {
         libs: [
             paths.npm + 'nipplejs/dist/nipplejs.js'
         ]
+    },
+    'angular': {
+        libs: [
+            paths.npm + 'angular/angular.min.js'
+        ]
     }
 };
 

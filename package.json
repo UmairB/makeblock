@@ -4,11 +4,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "angular": "^1.5.8",
     "es6-shim": "^0.35.1",
     "express": "*",
-    "serialport": "^4.0.1",
     "nipplejs": "*",
     "open": "0.0.5",
+    "serialport": "^4.0.1",
     "socket.io": "^1.4.8",
     "systemjs": "^0.19.35",
     "winston": "^2.2.0",

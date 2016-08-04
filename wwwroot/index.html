@@ -8,27 +8,32 @@
 
     <link rel="stylesheet" href="/app/app.css" />
 
+    <script src="/lib/es6-shim/es6-shim.js"></script>
     <script src="/lib/systemjs/system.js"></script>
     <script>
         System.config({
             defaultJSExtensions: true,
             map: {
-                'nipplejs': '/lib/nipplejs/nipplejs.js',
-                'socket.io-client': '/socket.io/socket.io.js'
+                'app': 'app/app'
+                'nipplejs': '/lib/nipplejs/nipplejs',
+                'angularjs': '/lib/angular/angular.min',
+                'config': '/api/config',
+                'socket.io-client': '/socket.io/socket.io'
             },
             meta: {
                 'nipplejs': {
                     format: 'global'
+                },
+                'app': {
+                    deps: ['angularjs', 'nipplejs', 'config']
                 }
             }
         });
-    </script>
-    <script src="/lib/es6-shim/es6-shim.js"></script>
-    <script>
-        System.import('app/app');
+
+        System.import('app');
     </script>
 </head>
-<body>
+<body ng-controller="appCtrl">
     <div class="container">
         <div class="sensor-distance">
             <h2>Distance:&nbsp;<span class="distance"></span></h2>
