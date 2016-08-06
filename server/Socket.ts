@@ -1,5 +1,3 @@
-/// <reference path='../typings/index.d.ts' />
-
 import * as socket from 'socket.io';
 import * as http from 'http';
 import { Config } from '../Config';
@@ -14,6 +12,8 @@ export class Socket {
     private currentClientId: string;
 
     constructor(server: http.Server, bot: Bot) {
+        this.currentClientId = null;
+
         this.io = socket(server);
         this.bot = bot;
 
@@ -43,9 +43,7 @@ export class Socket {
     }
 
     private initEvents(socket: SocketIO.Socket) {
-        if (!this.currentClientId) {
-            this.currentClientId = socket.client.id;
-        }
+        this.checkUserConnection(socket);
 
         if (this.bot.isInitialized) {
             socket.on('joystick move', (value: IJoystickValues) => {
@@ -65,8 +63,30 @@ export class Socket {
             });
         }
 
-        socket.on('disconnect', () => {
+        socket.on('joystick connection', this.checkUserConnection.bind(this, socket));
+
+        let onUserDisconnectedCb = this.onUserDisconnected.bind(this, socket);
+
+        socket.on('joystick disconnected', onUserDisconnectedCb);
+        socket.on('disconnect', onUserDisconnectedCb);
+    }
+
+    private checkUserConnection(socket: SocketIO.Socket) {
+        let connected = false;
+        if (this.currentClientId === null) {
+            this.currentClientId = socket.client.id;
+            connected = true;
+        }
+
+        socket.emit('joystick connected', connected);
+    }
+
+    private onUserDisconnected(socket: SocketIO.Socket) {
+        if (this.currentClientId === socket.client.id) {
             this.currentClientId = null;
-        });
+            socket.emit('joystick connected', false);
+
+            this.io.emit('joystick connectable');
+        }
     }
 }

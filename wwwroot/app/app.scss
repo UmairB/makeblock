@@ -29,7 +29,7 @@ html, body {
     height: 100%;
     padding: 10px;
     display: table;
-    > * {
+    > .row {
         display: table-row;
     }
 }
@@ -38,14 +38,60 @@ html, body {
     text-align: center;
 }
 
-.joystick-container, .joystick {
+.joystick-row {
     height: 100%;
     width: 100%;
-    position: relative;
+    .joystick-container, .joystick {
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
 }
 
-.bottom {
+.joystick-container {
+    &.loading, &.disabled {
+        .loader {
+            display: block;
+            z-index: 1;
+        }
+        .joystick {
+            opacity: 0.3;
+            z-index: 0;
+        }
+    }
+    &.disabled {
+        .ic-loading {
+            display: none;
+        }
+    }
+}
+
+.connection-state {
     text-align: center;
+    .state {
+        display: inline-block;
+        margin-right: 15px;
+    }
+    &.connected {
+        .state > span {
+            color: #5cb85c;
+        }
+        .btn {
+            color: #fff;
+            background-color: #d9534f;
+            border-color: #d9534f;
+        }
+    }
+    &.disconnected {
+        .state > span {
+            color: #d9534f;
+        }
+        .btn {
+            color: #fff;
+            background-color: #5bc0de;
+            border-color: #5bc0de;
+        }
+    }
 }
 
 .loader {
@@ -70,6 +116,21 @@ html, body {
 
 *, *:before, *:after {
     box-sizing: inherit;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    border-radius: .25rem;
 }
 
 @keyframes rotate {

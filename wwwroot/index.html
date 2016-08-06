@@ -50,17 +50,20 @@
 </head>
 <body ng-controller="appCtrl as app">
     <div class="container">
-        <div class="sensor-distance">
+        <div class="sensor-distance row">
             <h2>Distance:&nbsp;<span class="app.distance"></span></h2>
         </div>
-        <div class="joystick-container">
-            <span class="loader">
-                <span class="ic-loading"></span>
-            </span>
-            <joystick api="app.joystickApi"></joystick>
+        <div class="joystick-row row">
+            <div class="joystick-container" ng-class="{'disabled':app.joystickDisabled, 'loading':app.checkingAvailability}">
+                <span class="loader">
+                    <span class="ic-loading"></span>
+                </span>
+                <joystick api="app.joystickApi"></joystick>
+            </div>
         </div>
-        <div class="bottom">
-            <button>Test</button>
+        <div class="connection-state row" ng-class="app.connectionState">
+            <span class="state">State:&nbsp;<span>{{app.connectionState}}</span></span>
+            <button class="btn" ng-click="app.connectButton.click()">{{app.connectButton.text}}</button>
         </div>
     </div>
 </body>
