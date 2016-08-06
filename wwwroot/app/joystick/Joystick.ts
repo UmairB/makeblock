@@ -1,18 +1,41 @@
 declare var nipplejs: any;
-import { IJoystickOptions } from './IJoystickOptions';
+import { IJoystickOptions } from '../IAppOptions';
+
+export interface IJoystickApi {
+    event: {
+        onMove: (radialDistance, angle) => void,
+        onEnd: () => void
+    }
+}
 
 export class Joystick {
     private joystick;
 
-    constructor(private joystickElement: Element, private options: IJoystickOptions) {
+    constructor(private options: IJoystickOptions, private api: IJoystickApi, private joystickElement: HTMLElement) {
         this.initJoystick();
     }
 
-    public onEnd(onEnd: () => void) {
-        this.joystick.on('end', () => onEnd());
+    private initJoystick() {
+        this.joystick = nipplejs.create({
+            zone: this.joystickElement,
+            size: this.options.radius * 2,
+            mode: 'static',
+            position: { left: '50%', top: '50%' },
+            color: 'red'
+        });
+
+        // set up events
+        if (this.api.event) {
+            this.onMove();
+            this.onEnd();
+        }
     }
 
-    public onMove(onMove: (radialDistance, angle) => void) {
+    private onEnd() {
+        this.joystick.on('end', this.api.event.onEnd.bind(this.api.event));
+    }
+
+    private onMove() {
         let radialThreshold = this.options.radialThreshold;
 
         let currentValue = { angle: 0, distance: 0 };
@@ -27,7 +50,7 @@ export class Joystick {
                 currentValue.angle = tAngle;
                 currentValue.distance = tDis;
 
-                onMove(currentValue.distance, currentValue.angle);
+                this.api.event.onMove(currentValue.distance, currentValue.angle);
             }
         });
     }
@@ -51,19 +74,5 @@ export class Joystick {
         // // else just use the threshold
         // angleThreshold = this.options.angleThreshold;
         // return Math.floor(angle / angleThreshold) * angleThreshold;
-    }
-
-    private initJoystick() {
-        this.joystick = nipplejs.create({
-            zone: this.joystickElement,
-            size: this.options.radius * 2,
-            mode: 'static',
-            position: { left: '50%', top: '50%' },
-            color: 'red'
-        });
-
-        if (this.options.hideOnInit) {
-            this.joystick.get().hide();
-        }
     }
 }

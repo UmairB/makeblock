@@ -39,7 +39,8 @@ var libs = {
     },
     'angular': {
         libs: [
-            paths.npm + 'angular/angular.min.js'
+            paths.npm + 'angular/angular.min.js',
+            paths.npm + 'angular-deferred-bootstrap/angular-deferred-bootstrap.min.js'
         ]
     }
 };
