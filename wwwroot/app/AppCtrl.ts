@@ -19,6 +19,7 @@ interface IAppModel {
 
 interface IConnectButton {
     text: string,
+    disabled: boolean,
     click: () => void
 }
 
@@ -37,6 +38,7 @@ export class AppCtrl implements IAppModel {
         this.joystickDisabled = false;
         this.connectButton = {
             text: 'Connect',
+            disabled: true,
             click: this.toggleJoystickConnection.bind(this)
         };
 
@@ -45,7 +47,6 @@ export class AppCtrl implements IAppModel {
     }
 
     private toggleJoystickConnection() {
-        debugger;
         let event = 'joystick ';
         if (this.connectionState === connectionState[connectionState.connected]) {
             event += 'disconnected';
@@ -61,11 +62,9 @@ export class AppCtrl implements IAppModel {
         this.joystickApi = {
             event: {
                 onMove: (radialDistance, angle) => {
-                    debugger;
                     this.socket.emit('joystick move', { radialDistance, angle });
                 },
                 onEnd: () => {
-                    debugger;
                     this.socket.emit('joystick reset');
                 }
             }
@@ -80,12 +79,19 @@ export class AppCtrl implements IAppModel {
             this.$scope.$applyAsync((s) => this.distance = value.distance);
         });
 
+        this.socket.on('joystick connectable', (available: boolean) => {
+            this.connectButton.disabled = !available;
+        });
+
         this.socket.on('joystick connected', (connected: boolean) => {
             this.$scope.$applyAsync((s) => {
                 this.checkingAvailability = false;
                 this.joystickDisabled = !connected;
                 this.connectionState = connectionState[connected ? connectionState.connected : connectionState.disconnected];
                 this.connectButton.text = connected ? 'Disconnect' : 'Connect';
+                if (connected) {
+                    this.connectButton.disabled = false;
+                }
             });
         });
     }

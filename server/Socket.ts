@@ -76,6 +76,8 @@ export class Socket {
         if (this.currentClientId === null) {
             this.currentClientId = socket.client.id;
             connected = true;
+
+            this.io.emit('joystick connectable', false);
         }
 
         socket.emit('joystick connected', connected);
@@ -86,7 +88,7 @@ export class Socket {
             this.currentClientId = null;
             socket.emit('joystick connected', false);
 
-            this.io.emit('joystick connectable');
+            this.io.emit('joystick connectable', true);
         }
     }
 }

@@ -63,7 +63,7 @@
         </div>
         <div class="connection-state row" ng-class="app.connectionState">
             <span class="state">State:&nbsp;<span>{{app.connectionState}}</span></span>
-            <button class="btn" ng-click="app.connectButton.click()">{{app.connectButton.text}}</button>
+            <button class="btn" ng-class="{'disabled':app.connectButton.disabled}" ng-click="app.connectButton.click()">{{app.connectButton.text}}</button>
         </div>
     </div>
 </body>
