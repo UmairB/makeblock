@@ -51,6 +51,14 @@ export class MakeblockApi {
         this.dcMotorRun(port, 0, callback);
     }
 
+    public servoRun(port: number, slot: number, angle: number, callback?: (err: Error) => void) {
+        let id = 0;
+        let action = 2;
+        let device = 11;
+
+        this.write([id, action, device, port, slot, angle], callback);
+    }
+
     public ultrasonicSensorRead(port: number, callback: (err: Error, value?: number) => void) {
         let action = 1;
         let device = 1;
@@ -66,7 +74,7 @@ export class MakeblockApi {
             var buf = new Buffer([0xff, 0x55, buffer.length + 1].concat(buffer).concat([0xa]));
 
             this.port.write(buf, (err, bytesWritten) => {
-                if (err) {
+                if (err && callback) {
                     callback(Error(err));
                 }
             });

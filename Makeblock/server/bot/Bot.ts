@@ -1,10 +1,16 @@
 import { IMotorConfig, IBotConfig } from '../../Config';
 import { MakeblockApi } from '../api/MakeblockApi';
 
+export enum Slot {
+    One = 1,
+    Two = 2
+}
+
 export class Bot {
     private bot: MakeblockApi;
     private _motor: Motor;
     private _ultrasonicSensor: UltrasonicSensor;
+    private _servo: Servo;
 
     public get isInitialized() : boolean {
         return this.bot.isOpen;
@@ -16,6 +22,10 @@ export class Bot {
 
     public get ultrasonicSensor() : UltrasonicSensor {
         return this._ultrasonicSensor;
+    }
+
+    public get servo() : Servo {
+        return this._servo;
     }
 
     constructor(config: IBotConfig) {
@@ -31,6 +41,7 @@ export class Bot {
 
         this._motor = new Motor(this.bot);
         this._ultrasonicSensor = new UltrasonicSensor(this.bot);
+        this._servo = new Servo(this.bot);
     }
 
     public shutdown(callback?: (err: Error) => void) : boolean {
@@ -73,5 +84,17 @@ class Motor {
     public reset(motorConfig: IMotorConfig) {
         this.stop(motorConfig.left.port);
         this.stop(motorConfig.right.port);
+    }
+}
+
+class Servo {
+    private bot: MakeblockApi;
+
+    constructor(bot: any) {
+        this.bot = bot;
+    }
+
+    public run(port: number, slot: Slot, angle: number) {
+        this.bot.servoRun(port, slot, angle);
     }
 }

@@ -8,6 +8,7 @@ typings/
 wwwroot/lib
 **/*.js
 !**/gulpfile.js
+!Libs/**/*.js
 **/*.js.map
 **/*.css
 **/*.css.map
