@@ -65,10 +65,14 @@ export class Socket {
 
         socket.on('joystick connection', this.checkUserConnection.bind(this, socket));
 
-        let onUserDisconnectedCb = this.onUserDisconnected.bind(this, socket);
+        let onUserDisconnectedCb: () => void = this.onUserDisconnected.bind(this, socket);
 
-        socket.on('joystick disconnected', onUserDisconnectedCb);
-        socket.on('disconnect', onUserDisconnectedCb);
+        socket.on('joystick disconnected', () => {
+            onUserDisconnectedCb();
+        });
+        socket.on('disconnect', () => {
+            onUserDisconnectedCb();
+        });
     }
 
     private checkUserConnection(socket: SocketIO.Socket) {

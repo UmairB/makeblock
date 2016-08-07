@@ -68,6 +68,9 @@ html, body {
 
 .connection-state {
     text-align: center;
+    .btn {
+        color: #fff;
+    }
     .state {
         display: inline-block;
         margin-right: 15px;
@@ -76,8 +79,7 @@ html, body {
         .state > span {
             color: #5cb85c;
         }
-        .btn {
-            color: #fff;
+        .btn:not(.disabled) {
             background-color: #d9534f;
             border-color: #d9534f;
         }
@@ -86,8 +88,7 @@ html, body {
         .state > span {
             color: #d9534f;
         }
-        .btn {
-            color: #fff;
+        .btn:not(.disabled) {
             background-color: #5bc0de;
             border-color: #5bc0de;
         }

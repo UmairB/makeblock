@@ -47,15 +47,17 @@ export class AppCtrl implements IAppModel {
     }
 
     private toggleJoystickConnection() {
-        let event = 'joystick ';
+        let event;
         if (this.connectionState === connectionState[connectionState.connected]) {
-            event += 'disconnected';
-        } else {
-            event += 'connection';
+            event += 'joystick disconnected';
+        } else if (!this.connectButton.disabled) {
+            event += 'joystick connection';
         }
 
-        this.checkingAvailability = true;
-        this.socket.emit(event);
+        if (event) {
+            this.checkingAvailability = true;
+            this.socket.emit(event);
+        }
     }
 
     private initJoystick() {
@@ -80,7 +82,7 @@ export class AppCtrl implements IAppModel {
         });
 
         this.socket.on('joystick connectable', (available: boolean) => {
-            this.connectButton.disabled = !available;
+            this.$scope.$applyAsync((s) => this.connectButton.disabled = !available);
         });
 
         this.socket.on('joystick connected', (connected: boolean) => {

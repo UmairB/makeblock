@@ -12,7 +12,7 @@ export class MakeblockApi {
     private port: SerialPort;
 
     public get isOpen(): boolean {
-        return this.port.isOpen;
+        return this.port.isOpen();
     }
 
     constructor(options: IMakeblockApiOptions) {
