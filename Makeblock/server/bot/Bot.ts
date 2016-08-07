@@ -1,4 +1,4 @@
-import { IMotorConfig, IBotConfig } from '../../Config';
+import { IMotorConfig, IPortConfig } from '../../Config';
 import { MakeblockApi } from '../api/MakeblockApi';
 
 export enum Slot {
@@ -6,47 +6,49 @@ export enum Slot {
     Two = 2
 }
 
+export enum BotComponent {
+    UltrasonicSensor,
+    Motor,
+    Servo
+}
+
 export class Bot {
-    private bot: MakeblockApi;
-    private _motor: Motor;
-    private _ultrasonicSensor: UltrasonicSensor;
-    private _servo: Servo;
+    private _bot: MakeblockApi;
+    private _components: { [id: string]: IBotComponent };
 
     public get isInitialized() : boolean {
-        return this.bot.isOpen;
+        return this._bot.isOpen;
     }
 
-    public get motor() : Motor {
-        return this._motor;
-    }
-
-    public get ultrasonicSensor() : UltrasonicSensor {
-        return this._ultrasonicSensor;
-    }
-
-    public get servo() : Servo {
-        return this._servo;
-    }
-
-    constructor(config: IBotConfig) {
-        this.bot = new MakeblockApi({ 
+    constructor(config: IPortConfig, components: Array<BotComponent>) {
+        this._bot = new MakeblockApi({ 
             port: config.port, 
             baudrate: config.baudrate,
             onPortError: (err) => console.log(err)
         });
+
+        this._components = {};
+        components.forEach(id => this._components[BotComponent[id]] = null);
+    }
+
+    public getComponent<T extends IBotComponent>(component: BotComponent) {
+        return <T>this._components[BotComponent[component]];
     }
 
     public initialize(callback: (err: Error) => void) {
-        this.bot.open(callback);
+        this._bot.open(callback);
 
-        this._motor = new Motor(this.bot);
-        this._ultrasonicSensor = new UltrasonicSensor(this.bot);
-        this._servo = new Servo(this.bot);
+        for (let key in this._components) {
+            let ctor = eval(key);
+            let component: IBotComponent = new ctor(this._bot);
+
+            this._components[key] = component;
+        }
     }
 
     public shutdown(callback?: (err: Error) => void) : boolean {
-        if (this.bot.isOpen) {
-            this.bot.close(callback);
+        if (this._bot.isOpen) {
+            this._bot.close(callback);
             return true;
         }
 
@@ -54,8 +56,16 @@ export class Bot {
     }
 }
 
-class UltrasonicSensor {
+export interface IBotComponent {
+    botComponent: BotComponent
+}
+
+export class UltrasonicSensor implements IBotComponent {
     private bot: MakeblockApi;
+
+    public get botComponent() {
+        return BotComponent.UltrasonicSensor;
+    }
 
     constructor(bot: any) {
         this.bot = bot;
@@ -66,8 +76,12 @@ class UltrasonicSensor {
     }
 }
 
-class Motor {
+export class Motor implements IBotComponent {
     private bot: MakeblockApi;
+
+    public get botComponent() {
+        return BotComponent.Motor;
+    }
 
     constructor(bot: any) {
         this.bot = bot;
@@ -87,8 +101,12 @@ class Motor {
     }
 }
 
-class Servo {
+export class Servo implements IBotComponent {
     private bot: MakeblockApi;
+
+    public get botComponent() {
+        return BotComponent.Servo;
+    }
 
     constructor(bot: any) {
         this.bot = bot;

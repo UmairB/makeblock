@@ -1,7 +1,7 @@
 import * as socket from 'socket.io';
 import * as http from 'http';
 import { Config } from '../Config';
-import { Bot, BotService } from './bot/module';
+import { Bot, BotService, BotComponent, UltrasonicSensor, Motor, Servo } from './bot/module';
 import { IJoystickValues, IMotorValues } from './model/module';
 
 export class Socket {
@@ -25,8 +25,9 @@ export class Socket {
 
         // setup the distance event emitter
         if (this.bot.isInitialized) {
-            this.sensorDistanceInterval = setInterval(() => {
-                this.bot.ultrasonicSensor.read(Config.bot.ultrasonicSensor.port, (err, distance) => {
+            let sensor = this.bot.getComponent<UltrasonicSensor>(BotComponent.UltrasonicSensor);
+            this.sensorDistanceInterval = setInterval(() => { 
+                sensor.read(Config.bot.ultrasonicSensor.port, (err, distance) => {
                     if (typeof distance !== "undefined") {
                         this.io.emit('sensor distance', { distance: `${distance.toFixed(2)}cm` });
                     }
@@ -46,19 +47,20 @@ export class Socket {
         this.checkUserConnection(socket);
 
         if (this.bot.isInitialized) {
+            let motor = this.bot.getComponent<Motor>(BotComponent.Motor);
             socket.on('joystick move', (value: IJoystickValues) => {
                 if (this.currentClientId === socket.client.id) {
                     let motorValues = this.botService.CalculateMotorValues(value);
                     if (motorValues) {
-                        this.bot.motor.run(Config.bot.motor.left.port, motorValues.left);
-                        this.bot.motor.run(Config.bot.motor.right.port, motorValues.right);
+                        motor.run(Config.bot.motor.left.port, motorValues.left);
+                        motor.run(Config.bot.motor.right.port, motorValues.right);
                     }
                 }
             });
 
             socket.on('joystick reset', () => {
                 if (this.currentClientId === socket.client.id) {
-                    this.bot.motor.reset(Config.bot.motor);
+                    motor.reset(Config.bot.motor);
                 }
             });
         }

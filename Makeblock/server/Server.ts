@@ -3,7 +3,7 @@ import * as http from 'http';
 import * as path from 'path';
 import { Config, IClientConfig } from '../Config';
 import { Socket } from './Socket';
-import { Bot } from './bot/Bot';
+import { Bot, BotComponent, Motor } from './bot/Bot';
 import { logger } from './log/Logger';
 
 let app: express.Express;
@@ -42,7 +42,7 @@ export class Server {
     }
 
     public start(port: number, onStart: (address: string, port: number) => void = null, onError: (err: Error) => void = null) {
-        bot = new Bot(Config.bot);
+        bot = new Bot(Config.bot, [BotComponent.UltrasonicSensor, BotComponent.Motor, BotComponent.Servo]);
         bot.initialize((err: Error) => {
             if (err) {
                 logger.exception(err, 'Error initializing bot');
@@ -98,6 +98,6 @@ export class Server {
     }
 
     private onBotInit() {
-        bot.motor.reset(Config.bot.motor);
+        bot.getComponent<Motor>(BotComponent.Motor).reset(Config.bot.motor);
     }
 }

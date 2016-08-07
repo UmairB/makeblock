@@ -11,7 +11,12 @@ export interface IWebServerConfig {
     root: string
 }
 
-export interface IBotConfig {
+export interface IPortConfig {
+    port: string,
+    baudrate: number
+}
+
+export interface IBotConfig extends IPortConfig {
     port: string,
     baudrate: number,
     ultrasonicSensor: IUltrasonicSensorConfig,
