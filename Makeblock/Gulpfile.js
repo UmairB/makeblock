@@ -5,17 +5,23 @@ const gulp = require('gulp'),
       ts = require('gulp-typescript'),
       sass = require("gulp-sass"),
       sourcemaps = require('gulp-sourcemaps'),
-      jasmine = require('gulp-jasmine');
+      jasmine = require('gulp-jasmine'),
+      notify = require('gulp-notify');
 
 var paths = {
     webroot: "./wwwroot/",
-    npm: './node_modules/'
+    npm: './node_modules/',
+    gulp: path.join(__dirname, 'gulp/')
 };
 
 paths.lib = paths.webroot + 'lib/';
 paths.app = paths.webroot + "app/";
 paths.sass = paths.app + "**/*.scss";
 paths.typescript = "./**/*.ts";
+paths.resource = {
+    typescript: paths.gulp + 'resource/ts.png',
+    sass: paths.gulp + 'resource/sass.png'
+};
 paths.ignore = {
     npm: '!' + paths.npm + '/**'
 };
@@ -59,9 +65,21 @@ gulp.task('build:typescript', function () {
     return tsProject.src()
         //.pipe(sourcemaps.init())
         .pipe(ts(tsProject))
+        .on('error', notify.onError({
+            onLast: true,
+            title: 'TypeScript',
+            message: 'Typescript compilation failed',
+            icon: paths.resource.typescript
+        }))
         .js
         //.pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '/' }))
-        .pipe(gulp.dest(function (file) { return file.base; }));
+        .pipe(gulp.dest(function (file) { return file.base; }))
+        .pipe(notify({
+            onLast: true,
+            title: 'TypeScript',
+            message: 'Typescript compilation completed',
+            icon: paths.resource.typescript 
+        }));
 });
 
 gulp.task('build:sass', function () {
@@ -74,7 +92,7 @@ gulp.task('build:sass', function () {
 });
 
 // jasmine tests
-gulp.task('jasmine', ['build:typescript'], function () {
+gulp.task('jasmine', function () {
     return gulp.src(['./**/*.spec.js', paths.ignore.npm])
         // gulp-jasmine works on filepaths so you can't have any plugins before it
         .pipe(jasmine());
