@@ -24,7 +24,7 @@ export class Socket {
         this.io.on('connection', this.initEvents.bind(this));
 
         // setup the distance event emitter
-        if (this.bot.isInitialized) {
+        if (this.bot.isInitialized && !Config.bot.ultrasonicSensor) {
             let sensor = this.bot.getComponent<UltrasonicSensor>(BotComponent.UltrasonicSensor);
             this.sensorDistanceInterval = setInterval(() => { 
                 sensor.read(Config.bot.ultrasonicSensor.port, (err, distance) => {
@@ -32,7 +32,7 @@ export class Socket {
                         this.io.emit('sensor distance', { distance: `${distance.toFixed(2)}cm` });
                     }
                 });
-            }, Config.event.ultrasonicSensor.interval);
+            }, Config.bot.ultrasonicSensor.refreshInterval);
         }
     }
 

@@ -2,7 +2,6 @@ export interface IConfig {
     botRequired: boolean,
     webServer: IWebServerConfig,
     bot: IBotConfig,
-    event: IEventConfig,
     joystick: IJoystickConfig
 }
 
@@ -19,12 +18,14 @@ export interface IPortConfig {
 export interface IBotConfig extends IPortConfig {
     port: string,
     baudrate: number,
-    ultrasonicSensor: IUltrasonicSensorConfig,
-    motor: IMotorConfig
+    motor: IMotorConfig,
+    ultrasonicSensor?: IUltrasonicSensorConfig,
+    servo?: IServoConfig
 }
 
 export interface IUltrasonicSensorConfig {
-    port: number
+    port: number,
+    refreshInterval: number
 }
 
 export interface IMotorConfig {
@@ -37,10 +38,9 @@ export interface IMotorConfig {
     }
 }
 
-export interface IEventConfig {
-    ultrasonicSensor: {
-        interval: number
-    }
+export interface IServoConfig {
+    port: number,
+    slot: number
 }
 
 export interface IJoystickConfig {
@@ -64,16 +64,18 @@ export const Config = <IConfig>{
     "bot": {
         "port": "COM4",
         "baudrate": 115200,
-        "ultrasonicSensor": { port: 3 },
         "motor": {
             "maxPowerValue": 255, 
             "left": { port: 9 },
             "right": { port: 10 }
-        }
-    },
-    "event": {
-        "ultrasonicSensor": {
-            "interval": 1000
+        },
+        "ultrasonicSensor": { 
+            port: 3,
+            refreshInterval: 1000 
+        },
+        "servo": {
+            port: 1,
+            slot: 1
         }
     },
     "joystick": {
