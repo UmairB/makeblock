@@ -4,7 +4,8 @@ artifacts/
 node_modules/
 bower_components/
 logs/
-typings/
+**/typings/**/*.*
+!**/typings/**/serialport/*.ts
 wwwroot/lib
 **/*.js
 !**/gulpfile.js
