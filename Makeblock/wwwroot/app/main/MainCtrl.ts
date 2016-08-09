@@ -1,14 +1,14 @@
 import * as angular from 'angular';
 import * as io from 'socket.io-client';
-import './app';
-import { IJoystickApi } from './joystick/Joystick';
+import '../app';
+import { IJoystickApi } from '../joystick/Joystick';
 
 enum connectionState {
     connected,
     disconnected
 }
 
-interface IAppModel {
+interface IViewModel {
     distance: string,
     joystickApi: IJoystickApi,
     checkingAvailability: boolean,
@@ -23,7 +23,7 @@ interface IConnectButton {
     click: () => void
 }
 
-export class AppCtrl implements IAppModel {
+export class MainCtrl implements IViewModel {
     private socket: SocketIOClient.Socket;
 
     public distance: string;
@@ -100,4 +100,4 @@ export class AppCtrl implements IAppModel {
 }
 
 angular.module('app')
-    .controller('appCtrl', ['$scope', AppCtrl]);
+    .controller('mainCtrl', ['$scope', MainCtrl]);

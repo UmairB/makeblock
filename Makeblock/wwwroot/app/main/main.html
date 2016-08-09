@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="sensor-distance row">
+        <h2>Distance:&nbsp;<span class="ctrl.distance"></span></h2>
+    </div>
+    <div class="joystick-row row">
+        <div class="joystick-container" ng-class="{'disabled':ctrl.joystickDisabled, 'loading':ctrl.checkingAvailability}">
+            <span class="loader">
+                <span class="ic-loading"></span>
+            </span>
+            <joystick api="ctrl.joystickApi"></joystick>
+        </div>
+    </div>
+    <div class="connection-state row" ng-class="ctrl.connectionState">
+        <span class="state">State:&nbsp;<span>{{ctrl.connectionState}}</span></span>
+        <button class="btn" ng-class="{'disabled':ctrl.connectButton.disabled}" ng-click="ctrl.connectButton.click()">{{ctrl.connectButton.text}}</button>
+    </div>
+</div>

@@ -17,6 +17,7 @@
                 'app': 'app',
                 'nipplejs': '/lib/nipplejs/nipplejs',
                 'angular': '/lib/angular/angular.min',
+                'angular-route': '/lib/angular/angular-route.min',
                 'angular-deferred-bootstrap': '/lib/angular/angular-deferred-bootstrap.min',
                 'socket.io-client': '/socket.io/socket.io'
             },
@@ -26,6 +27,9 @@
                 },
                 'angular': {
                     format: 'global'
+                },
+                'angular-route': {
+                    deps: ['angular']
                 },
                 'angular-deferred-bootstrap': {
                     format: 'global',
@@ -40,31 +44,11 @@
             }
         });
 
-        Promise.all([
-            System.import('app/AppCtrl'),
-            System.import('app/joystick/JoystickDirective')
-        ])
-        .then(function() { return System.import('app/bootstrap'); })
-        .catch(console.error.bind(console));
+        System.import('app/bootstrap')
+              .catch(console.error.bind(console));
     </script>
 </head>
-<body ng-controller="appCtrl as app">
-    <div class="container">
-        <div class="sensor-distance row">
-            <h2>Distance:&nbsp;<span class="app.distance"></span></h2>
-        </div>
-        <div class="joystick-row row">
-            <div class="joystick-container" ng-class="{'disabled':app.joystickDisabled, 'loading':app.checkingAvailability}">
-                <span class="loader">
-                    <span class="ic-loading"></span>
-                </span>
-                <joystick api="app.joystickApi"></joystick>
-            </div>
-        </div>
-        <div class="connection-state row" ng-class="app.connectionState">
-            <span class="state">State:&nbsp;<span>{{app.connectionState}}</span></span>
-            <button class="btn" ng-class="{'disabled':app.connectButton.disabled}" ng-click="app.connectButton.click()">{{app.connectButton.text}}</button>
-        </div>
-    </div>
+<body>
+    <ng-view></ng-view>
 </body>
 </html>

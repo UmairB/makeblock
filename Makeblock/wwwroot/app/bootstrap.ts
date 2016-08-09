@@ -1,3 +1,7 @@
+import './main/MainCtrl';
+import './config/ConfigCtrl';
+import './joystick/JoystickDirective';
+
 import { IHttpService } from 'angular';
 
 deferredBootstrapper.bootstrap({

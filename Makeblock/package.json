@@ -6,6 +6,7 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-deferred-bootstrap": "^0.1.9",
+    "angular-route": "^1.5.8",
     "es6-shim": "^0.35.1",
     "express": "*",
     "jquery": "^3.1.0",
