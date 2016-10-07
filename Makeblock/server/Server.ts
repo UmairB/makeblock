@@ -21,9 +21,7 @@ export class Server {
         
         let apiRouter = express.Router();
         apiRouter.get('/config\.:ext?', function(req, res) {
-            let clientConfig = <IClientConfig>{
-                joystick: Config.joystick
-            };
+            let clientConfig = Config.client;
 
             if (req.params.ext === "js") {
                 res.header("Content-Type", "application/javascript");

@@ -1,13 +1,13 @@
 <div class="container">
     <div class="sensor-distance row">
-        <h2>Distance:&nbsp;<span class="ctrl.distance"></span></h2>
+        <h2>Distance:&nbsp;<span>{{ctrl.distance}}</span></h2>
     </div>
     <div class="joystick-row row">
         <div class="joystick-container" ng-class="{'disabled':ctrl.joystickDisabled, 'loading':ctrl.checkingAvailability}">
-            <span class="loader">
-                <span class="ic-loading"></span>
-            </span>
-            <joystick api="ctrl.joystickApi"></joystick>
+            <joystick options="ctrl.joystick.motor.options" api="ctrl.joystick.motor.api"></joystick>
+            <div class="camera-container">
+            </div>
+            <joystick options="ctrl.joystick.servo.options" api="ctrl.joystick.servo.api"></joystick>
         </div>
     </div>
     <div class="connection-state row" ng-class="ctrl.connectionState">

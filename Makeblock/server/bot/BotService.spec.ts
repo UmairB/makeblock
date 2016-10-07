@@ -1,8 +1,9 @@
 ///<reference path="../../typings/globals/jasmine/index.d.ts" />
-
 import { BotService } from './BotService';
 import { IJoystickValues } from '../model/module';
 import { Config } from '../../Config';
+
+let motorConfig = Config.client.joystick.motor;
 
 describe("BotService spec", () => {
     let botService = new BotService();
@@ -15,7 +16,7 @@ describe("BotService spec", () => {
 
         it('calculate values for east movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 0
             };
 
@@ -28,7 +29,7 @@ describe("BotService spec", () => {
 
         it('calculate values for north-east movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 45
             };
 
@@ -41,7 +42,7 @@ describe("BotService spec", () => {
 
         it('calculate values for north movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 90
             };
 
@@ -54,7 +55,7 @@ describe("BotService spec", () => {
 
         it('calculate values for north-west movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 135
             };
 
@@ -67,7 +68,7 @@ describe("BotService spec", () => {
 
         it('calculate values for west movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 180
             };
 
@@ -80,7 +81,7 @@ describe("BotService spec", () => {
 
         it('calculate values for south-west movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 225
             };
 
@@ -93,7 +94,7 @@ describe("BotService spec", () => {
 
         it('calculate values for south movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 270
             };
 
@@ -106,7 +107,7 @@ describe("BotService spec", () => {
 
         it('calculate values for south-east movement', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius,
+                radialDistance: motorConfig.radius,
                 angle: 315
             };
 
@@ -119,7 +120,7 @@ describe("BotService spec", () => {
 
         it('calculate max power percentage', () => {
             let values = <IJoystickValues>{
-                radialDistance: Config.joystick.radius / 2,
+                radialDistance: motorConfig.radius / 2,
                 angle: 90
             };
 

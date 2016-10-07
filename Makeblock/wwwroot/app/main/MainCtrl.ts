@@ -1,6 +1,7 @@
 import * as angular from 'angular';
 import * as io from 'socket.io-client';
 import '../app';
+import { IAppOptions, IJoystickOptions } from '../IAppOptions';
 import { IJoystickApi } from '../joystick/Joystick';
 
 enum connectionState {
@@ -10,11 +11,22 @@ enum connectionState {
 
 interface IViewModel {
     distance: string,
-    joystickApi: IJoystickApi,
+    joystick: IJoystick,
     checkingAvailability: boolean,
     joystickDisabled: boolean,
     connectionState: string,
     connectButton: IConnectButton
+}
+
+interface IJoystick {
+    motor: {
+        options: IJoystickOptions;
+        api: IJoystickApi;
+    };
+    servo: {
+        options: IJoystickOptions;
+        api: IJoystickApi;
+    };
 }
 
 interface IConnectButton {
@@ -27,13 +39,13 @@ export class MainCtrl implements IViewModel {
     private socket: SocketIOClient.Socket;
 
     public distance: string;
-    public joystickApi: IJoystickApi;
+    public joystick: IJoystick;
     public checkingAvailability: boolean;
     public joystickDisabled: boolean;
     public connectionState: string;
     public connectButton: IConnectButton;
 
-    constructor(private $scope: angular.IScope) {
+    constructor(private $scope: angular.IScope, appOptions: IAppOptions) {
         this.checkingAvailability = true;
         this.joystickDisabled = false;
         this.connectButton = {
@@ -43,7 +55,7 @@ export class MainCtrl implements IViewModel {
         };
 
         this.initSockets();
-        this.initJoystick();
+        this.initJoystick(appOptions);
     }
 
     private toggleJoystickConnection() {
@@ -60,15 +72,28 @@ export class MainCtrl implements IViewModel {
         }
     }
 
-    private initJoystick() {
-        this.joystickApi = {
-            event: {
-                onMove: (radialDistance, angle) => {
-                    this.socket.emit('joystick move', { radialDistance, angle });
-                },
-                onEnd: () => {
-                    this.socket.emit('joystick reset');
+    private initJoystick(appOptions: IAppOptions) {
+        let api = (event: string) => {
+            return {
+                event: {
+                    onMove: (radialDistance, angle) => {
+                        this.socket.emit(`${event} move`, { radialDistance, angle });
+                    },
+                    onEnd: () => {
+                        this.socket.emit(`${event} reset`);
+                    }
                 }
+            };
+        } 
+
+        this.joystick = {
+            motor: {
+                options: appOptions.joystickOptions.motor,
+                api: api('motor')
+            },
+            servo: {
+                options: appOptions.joystickOptions.servo,
+                api: api('servo')
             }
         }
     }
@@ -100,4 +125,4 @@ export class MainCtrl implements IViewModel {
 }
 
 angular.module('app')
-    .controller('mainCtrl', ['$scope', MainCtrl]);
+    .controller('mainCtrl', ['$scope', 'appOptions', MainCtrl]);

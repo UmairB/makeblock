@@ -1,10 +1,6 @@
 import { IMotorConfig, IPortConfig } from '../../Config';
 import { MakeblockApi } from '../api/MakeblockApi';
-
-export enum Slot {
-    One = 1,
-    Two = 2
-}
+import { Slot } from "../model/Slot";
 
 export enum BotComponent {
     UltrasonicSensor,

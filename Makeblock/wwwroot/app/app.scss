@@ -47,14 +47,27 @@ ng-view {
 .joystick-row {
     height: 100%;
     width: 100%;
-    .joystick-container, .joystick {
-        height: 100%;
-        width: 100%;
-        position: relative;
-    }
+}
+
+.joystick {
+    position: relative;
+    width: $joystick-radius * 3;
+    height: $joystick-radius * 3;
+}
+
+.camera-container {
+    width: 100%;
 }
 
 .joystick-container {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    > * {
+        display: table-cell;
+    }
     &.loading, &.disabled {
         .loader {
             display: block;

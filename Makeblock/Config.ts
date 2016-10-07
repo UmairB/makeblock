@@ -1,57 +1,68 @@
 export interface IConfig {
-    botRequired: boolean,
-    webServer: IWebServerConfig,
-    bot: IBotConfig,
-    joystick: IJoystickConfig
+    botRequired: boolean;
+    webServer: IWebServerConfig;
+    bot: IBotConfig;
+    client: IClientConfig;
 }
 
 export interface IWebServerConfig {
-    port: number,
-    root: string
+    port: number;
+    root: string;
 }
 
 export interface IPortConfig {
-    port: string,
-    baudrate: number
+    port: string;
+    baudrate: number;
 }
 
 export interface IBotConfig extends IPortConfig {
-    port: string,
-    baudrate: number,
-    motor: IMotorConfig,
-    ultrasonicSensor?: IUltrasonicSensorConfig,
-    servo?: IServoConfig
+    port: string;
+    baudrate: number;
+    ultrasonicSensor: IUltrasonicSensorConfig;
+    servo: IServoConfig;
+    motor: IMotorConfig;
 }
 
 export interface IUltrasonicSensorConfig {
-    port: number,
-    refreshInterval: number
-}
-
-export interface IMotorConfig {
-    maxPowerValue: number,
-    left: {
-        port: number
-    },
-    right: {
-        port: number
-    }
+    port: number;
+    refreshInterval: number;
 }
 
 export interface IServoConfig {
-    port: number,
-    slot: number
+    port: number;
+    slot: {
+        [slot: number]: IServoSlotConfig;
+    };
+}
+
+export interface IServoSlotConfig {
+    neutral: number;
+    minValue: number;
+    maxValue: number;
+}
+
+export interface IMotorConfig {
+    maxPowerValue: number;
+    left: {
+        port: number;
+    };
+    right: {
+        port: number;
+    };
 }
 
 export interface IJoystickConfig {
-    radius: number,
-    angleThreshold: number,
-    angleMargin: number,
-    radialThreshold: number
+    radius: number;
+    angleThreshold: number;
+    angleMargin: number;
+    radialThreshold: number;
 }
 
 export interface IClientConfig {
-    joystick: IJoystickConfig
+    joystick: {
+        motor: IJoystickConfig;
+        servo: IJoystickConfig;
+    };
 }
 
 //port: COM3,/dev/ttyUSB0
@@ -62,26 +73,42 @@ export const Config = <IConfig>{
         "root": "wwwroot"
     },
     "bot": {
-        "port": "COM4",
+        "port": "COM3",
         "baudrate": 115200,
+        "ultrasonicSensor": { 
+            port: 4,
+            refreshInterval: 1000 
+        },
+        "servo": { 
+            port: 3,
+            slot: {
+                1: {
+                    neutral: 67,
+                    minValue: 10,
+                    maxValue: 130
+                } 
+            }
+         },
         "motor": {
             "maxPowerValue": 255, 
             "left": { port: 9 },
             "right": { port: 10 }
-        },
-        "ultrasonicSensor": { 
-            port: 3,
-            refreshInterval: 1000 
-        },
-        "servo": {
-            port: 1,
-            slot: 1
         }
     },
-    "joystick": {
-        "radius": 60,
-        "angleThreshold": 45,
-        "angleMargin": 20,
-        "radialThreshold": 5
+    "client": {
+        "joystick": {
+            "motor": {
+                "radius": 60,
+                "angleThreshold": 45,
+                "angleMargin": 20,
+                "radialThreshold": 5
+            },
+            "servo": {
+                "radius": 60,
+                "angleThreshold": 90,
+                "angleMargin": 45,
+                "radialThreshold": 10
+            }
+        }
     }
 };

@@ -1,10 +1,13 @@
 export interface IAppOptions {
-    joystickOptions: IJoystickOptions
+    joystickOptions: {
+        motor: IJoystickOptions;
+        servo: IJoystickOptions;
+    };
 }
 
 export interface IJoystickOptions {
-    angleThreshold: number,
-    angleMargin: number,
-    radialThreshold: number,
-    radius: number
+    radius: number;
+    angleThreshold: number;
+    angleMargin: number;
+    radialThreshold: number;
 }

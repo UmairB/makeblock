@@ -1,18 +1,18 @@
 import { Config } from '../../Config';
-import { IJoystickValues, IMotorValues } from '../model/module';
+import { IJoystickValues, IMotorValues, IServoValues, Slot } from '../model/module';
 
-const joystickConfig = Config.joystick;
+const joystickConfig = Config.client.joystick;
 const maxPowerValue = Config.bot.motor.maxPowerValue;
 
 export class BotService {
-    public CalculateMotorValues(value: IJoystickValues) : IMotorValues {
+    public CalculateMotorValues(value: IJoystickValues): IMotorValues {
         let motorValues: IMotorValues = null;
         if (value !== null) {
             this.verifyCorrectValue(value);
 
             motorValues = { left: 0, right: 0 };
 
-            let powerValue = (value.radialDistance / joystickConfig.radius) * maxPowerValue;
+            let powerValue = (value.radialDistance / joystickConfig.motor.radius) * maxPowerValue;
 
             if (value.angle === 0) {
                 motorValues.left = powerValue;
@@ -41,9 +41,36 @@ export class BotService {
         return motorValues;
     }
 
+    public CaculateServoValues(value: IJoystickValues): IServoValues {
+        let servoValues: IServoValues = null;
+        if (value != null && (value.angle === 0 || value.angle === 180)) {
+            let slotOneConfig = Config.bot.servo.slot[Slot.One];
+            let radialRatio = value.radialDistance / joystickConfig.servo.radius;
+            let angle;
+
+            if (value.angle === 0) {
+                angle = slotOneConfig.neutral - (radialRatio * (slotOneConfig.neutral - slotOneConfig.minValue));
+            } else {
+                angle = slotOneConfig.neutral + (radialRatio * (slotOneConfig.maxValue - slotOneConfig.neutral));
+            }
+
+            servoValues = {};
+            servoValues[Slot.One] = angle;
+        }
+
+        return servoValues;
+    }
+
+    public ResetServos(): IServoValues {
+        let servoValues: IServoValues = {};
+        servoValues[Slot.One] = Config.bot.servo.slot[Slot.One].neutral;
+
+        return servoValues;
+    }
+
     private verifyCorrectValue(value: IJoystickValues) {
-        if (value.radialDistance > joystickConfig.radius) {
-            value.radialDistance = joystickConfig.radius;
+        if (value.radialDistance > joystickConfig.motor.radius) {
+            value.radialDistance = joystickConfig.motor.radius;
         }
 
         if (value.angle >= 360) {
@@ -54,4 +81,5 @@ export class BotService {
 
 /*
     DC Motors have values in the range 255 to -255
+    Servo has range of values 0 to 180
 */
