@@ -63,6 +63,10 @@ export interface IClientConfig {
         motor: IJoystickConfig;
         servo: IJoystickConfig;
     };
+    camera: {
+        port: number;
+        query: string;
+    };
 }
 
 //port: COM3,/dev/ttyUSB0
@@ -76,16 +80,16 @@ export const Config = <IConfig>{
         "port": "COM3",
         "baudrate": 115200,
         "ultrasonicSensor": { 
-            port: 4,
-            refreshInterval: 1000 
+            "port": 4,
+            "refreshInterval": 1000 
         },
         "servo": { 
-            port: 3,
-            slot: {
-                1: {
-                    neutral: 67,
-                    minValue: 10,
-                    maxValue: 130
+            "port": 3,
+            "slot": {
+                "1": {
+                    "neutral": 67,
+                    "minValue": 10,
+                    "maxValue": 130
                 } 
             }
          },
@@ -109,6 +113,10 @@ export const Config = <IConfig>{
                 "angleMargin": 45,
                 "radialThreshold": 10
             }
+        },
+        "camera": {
+            "port": 8080,
+            "query": ""
         }
     }
 };

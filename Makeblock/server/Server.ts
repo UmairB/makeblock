@@ -3,13 +3,14 @@ import * as http from 'http';
 import * as path from 'path';
 import { Config, IClientConfig } from '../Config';
 import { Socket } from './Socket';
-import { Bot, BotComponent, Motor } from './bot/Bot';
+import { Bot, BotComponent, Motor, Camera } from './bot/module';
 import { logger } from './log/Logger';
 
 let app: express.Express;
 let server: http.Server;
 let socket: Socket;
 let bot: Bot;
+let camera: Camera;
 
 export class Server {
     constructor() {
@@ -54,6 +55,9 @@ export class Server {
                 }
             } else {
                 this.onBotInit();
+
+                camera = new Camera();
+                camera.start();
             }
 
             this.initServer(port, onStart);
@@ -62,7 +66,8 @@ export class Server {
 
     public stop(onClose: () => void = null) {
         bot.shutdown(logger.exception.bind(logger));
-
+        camera.end();
+        
         if (!server) {
             onClose();
             return;

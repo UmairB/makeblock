@@ -110,5 +110,5 @@ gulp.task('watch:jasmine', function () {
 });
 
 gulp.task('build', ['build:typescript', 'build:sass']);
-
+gulp.task('production', ['libs', 'build']);
 gulp.task('default', ['build']);
