@@ -22,7 +22,7 @@ export class Camera {
         if (!this.cameraProcess) {
             let fullPath = `${IMAGE_PATH}/${IMAGE_NAME}`;
             this.cameraProcess = spawn('raspistill', [
-                '-rot', '180',
+                '-rot', '0',
                 '-w', '640',
                 '-h', '480',
                 '-q', '5',
