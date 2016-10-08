@@ -44,6 +44,7 @@ export class MainCtrl implements IViewModel {
     public joystickDisabled: boolean;
     public connectionState: string;
     public connectButton: IConnectButton;
+    public cameraSrc: string;
 
     constructor(private $scope: angular.IScope, appOptions: IAppOptions) {
         this.checkingAvailability = true;
@@ -53,6 +54,7 @@ export class MainCtrl implements IViewModel {
             disabled: true,
             click: this.toggleJoystickConnection.bind(this)
         };
+        this.cameraSrc = `http://${window.location.hostname}:${appOptions.camera.port}?${appOptions.camera.query}`;
 
         this.initSockets();
         this.initJoystick(appOptions);

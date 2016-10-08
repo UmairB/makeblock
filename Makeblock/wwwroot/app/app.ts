@@ -6,7 +6,8 @@ let app = angular.module('app', ['ngRoute']);
 
 // the app config settings
 app.value('appOptions', <IAppOptions>{
-    joystickOptions: { motor: null, servo: null }
+    joystickOptions: { motor: null, servo: null },
+    camera: null
 });
 
 app.config(['$routeProvider', '$locationProvider', ($routeProvider: angular.route.IRouteProvider, $locationProvider: angular.ILocationProvider) => {
@@ -33,4 +34,5 @@ app.config(['$routeProvider', '$locationProvider', ($routeProvider: angular.rout
     let joystickOptions = config.joystick;
     appOptions.joystickOptions.motor = joystickOptions.motor;
     appOptions.joystickOptions.servo = joystickOptions.servo;
+    appOptions.camera = config.camera;
 }]);

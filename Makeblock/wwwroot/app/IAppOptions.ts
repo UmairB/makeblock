@@ -3,6 +3,10 @@ export interface IAppOptions {
         motor: IJoystickOptions;
         servo: IJoystickOptions;
     };
+    camera: {
+        port: number;
+        query: string;
+    };
 }
 
 export interface IJoystickOptions {

@@ -116,7 +116,7 @@ export const Config = <IConfig>{
         },
         "camera": {
             "port": 8080,
-            "query": ""
+            "query": "action=stream"
         }
     }
 };
