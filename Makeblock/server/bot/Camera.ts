@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import { spawn, ChildProcess } from "child_process";
+import { logger } from '../log/Logger';
 
 let IMAGE_PATH = '/tmp/stream',
     IMAGE_NAME = 'pic.jpg';
@@ -9,8 +10,13 @@ export class Camera {
     private streamingProcess: ChildProcess;
 
     public start() {
-        if (!fs.existsSync(IMAGE_PATH)) {
-            fs.mkdirSync(IMAGE_PATH);
+        try {
+            if (!fs.existsSync(IMAGE_PATH)) {
+                fs.mkdirSync(IMAGE_PATH);
+            }
+        } catch (e) {
+            logger.exception(e);
+            return;
         }
 
         if (!this.cameraProcess) {

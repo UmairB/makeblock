@@ -13,15 +13,19 @@ if (args[0] === "port-list") {
         });
     });
 } else {
+    let isProduction = (<string>process.env.NODE_ENV).trim() === "production";
+    
     let server = new Server();
     server.initRoutes();
 
     server.start(Config.webServer.port, (address, port) => {
         logger.info(`server listening at ${address}":"${port}`);
 
-        // open the documentation page (hopefully in a browser)
-        let open = require('open');
-        open(`http://localhost:${port}`);
+        if (!isProduction) {
+            // open the documentation page (hopefully in a browser)
+            let open = require('open');
+            open(`http://localhost:${port}`);
+        }
     });
 
     let onExit = () => {

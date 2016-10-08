@@ -3,6 +3,10 @@
   "description": "Makeblock starter robot kit web interface",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production node app",
+    "start_windows": "set NODE_ENV=production && node app"
+  },
   "dependencies": {
     "angular": "^1.5.8",
     "angular-deferred-bootstrap": "^0.1.9",
