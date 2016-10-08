@@ -48,7 +48,7 @@ export class Socket {
 
         if (this.bot.isInitialized) {
             let motor = this.bot.getComponent<Motor>(BotComponent.Motor);
-            socket.on('joystick move', (value: IJoystickValues) => {
+            socket.on('motor move', (value: IJoystickValues) => {
                 if (this.currentClientId === socket.client.id) {
                     let motorValues = this.botService.CalculateMotorValues(value);
                     if (motorValues) {
@@ -58,7 +58,7 @@ export class Socket {
                 }
             });
 
-            socket.on('joystick reset', () => {
+            socket.on('motor reset', () => {
                 if (this.currentClientId === socket.client.id) {
                     motor.reset(Config.bot.motor);
                 }

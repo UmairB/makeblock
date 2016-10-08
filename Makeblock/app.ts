@@ -13,7 +13,8 @@ if (args[0] === "port-list") {
         });
     });
 } else {
-    let isProduction = (<string>process.env.NODE_ENV).trim() === "production";
+    let environment = <string>process.env.NODE_ENV;
+    let isProduction = environment && environment.trim() === "production";
     
     let server = new Server();
     server.initRoutes();
