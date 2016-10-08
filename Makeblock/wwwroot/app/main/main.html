@@ -6,7 +6,7 @@
         <div class="joystick-container" ng-class="{'disabled':ctrl.joystickDisabled, 'loading':ctrl.checkingAvailability}">
             <joystick options="ctrl.joystick.motor.options" api="ctrl.joystick.motor.api"></joystick>
             <div class="camera-container">
-                <img ng-src="::{{ctrl.cameraSrc}}" />
+                <img ng-src="{{::ctrl.cameraSrc}}" />
             </div>
             <joystick options="ctrl.joystick.servo.options" api="ctrl.joystick.servo.api"></joystick>
         </div>

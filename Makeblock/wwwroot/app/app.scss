@@ -57,6 +57,10 @@ ng-view {
 
 .camera-container {
     width: 100%;
+    vertical-align: middle;
+    > img {
+        width: 100%;
+    }
 }
 
 .joystick-container {
