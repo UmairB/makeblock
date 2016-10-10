@@ -1,5 +1,6 @@
 import { IMotorConfig, IPortConfig } from '../../Config';
 import { MakeblockApi } from '../api/MakeblockApi';
+import { Camera } from "./Camera";
 import { Slot } from "../model/Slot";
 
 export enum BotComponent {
@@ -9,8 +10,9 @@ export enum BotComponent {
 }
 
 export class Bot {
-    private _bot: MakeblockApi;
-    private _components: { [id: string]: IBotComponent };
+    private readonly _bot: MakeblockApi;
+    private readonly _camera: Camera;
+    private readonly _components: { [id: string]: IBotComponent | null };
 
     public get isInitialized() : boolean {
         return this._bot.isOpen;
@@ -23,6 +25,8 @@ export class Bot {
             onPortError: (err) => console.log(err)
         });
 
+        this._camera = new Camera();
+
         this._components = {};
         components.forEach(id => this._components[BotComponent[id]] = null);
     }
@@ -33,6 +37,7 @@ export class Bot {
 
     public initialize(callback: (err: Error) => void) {
         this._bot.open(callback);
+        this._camera.start();
 
         for (let key in this._components) {
             let ctor = eval(key);
@@ -43,6 +48,7 @@ export class Bot {
     }
 
     public shutdown(callback?: (err: Error) => void) : boolean {
+        this._camera.end();
         if (this._bot.isOpen) {
             this._bot.close(callback);
             return true;

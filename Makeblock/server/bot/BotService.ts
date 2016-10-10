@@ -5,8 +5,8 @@ const joystickConfig = Config.client.joystick;
 const maxPowerValue = Config.bot.motor.maxPowerValue;
 
 export class BotService {
-    public CalculateMotorValues(value: IJoystickValues): IMotorValues {
-        let motorValues: IMotorValues = null;
+    public CalculateMotorValues(value: IJoystickValues | null): IMotorValues | null {
+        let motorValues: IMotorValues | null = null;
         if (value !== null) {
             this.verifyCorrectValue(value);
 
@@ -41,8 +41,8 @@ export class BotService {
         return motorValues;
     }
 
-    public CaculateServoValues(value: IJoystickValues): IServoValues {
-        let servoValues: IServoValues = null;
+    public CaculateServoValues(value: IJoystickValues | null): IServoValues | null {
+        let servoValues: IServoValues | null = null;
         if (value != null && (value.angle === 0 || value.angle === 180)) {
             let slotOneConfig = Config.bot.servo.slot[Slot.One];
             let radialRatio = value.radialDistance / joystickConfig.servo.radius;

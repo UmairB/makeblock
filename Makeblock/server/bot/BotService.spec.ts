@@ -1,4 +1,3 @@
-///<reference path="../../typings/globals/jasmine/index.d.ts" />
 import { BotService } from './BotService';
 import { IJoystickValues } from '../model/module';
 import { Config } from '../../Config';
@@ -23,8 +22,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(Config.bot.motor.maxPowerValue);
-            expect(result.right).toBe(-Config.bot.motor.maxPowerValue);
+            expect(result!.left).toBe(Config.bot.motor.maxPowerValue);
+            expect(result!.right).toBe(-Config.bot.motor.maxPowerValue);
         });
 
         it('calculate values for north-east movement', () => {
@@ -36,8 +35,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(Config.bot.motor.maxPowerValue);
-            expect(result.right).toBe(Config.bot.motor.maxPowerValue / 2);
+            expect(result!.left).toBe(Config.bot.motor.maxPowerValue);
+            expect(result!.right).toBe(Config.bot.motor.maxPowerValue / 2);
         });
 
         it('calculate values for north movement', () => {
@@ -49,8 +48,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(Config.bot.motor.maxPowerValue);
-            expect(result.right).toBe(Config.bot.motor.maxPowerValue);
+            expect(result!.left).toBe(Config.bot.motor.maxPowerValue);
+            expect(result!.right).toBe(Config.bot.motor.maxPowerValue);
         });
 
         it('calculate values for north-west movement', () => {
@@ -62,8 +61,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(Config.bot.motor.maxPowerValue / 2);
-            expect(result.right).toBe(Config.bot.motor.maxPowerValue);
+            expect(result!.left).toBe(Config.bot.motor.maxPowerValue / 2);
+            expect(result!.right).toBe(Config.bot.motor.maxPowerValue);
         });
 
         it('calculate values for west movement', () => {
@@ -75,8 +74,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(-Config.bot.motor.maxPowerValue);
-            expect(result.right).toBe(Config.bot.motor.maxPowerValue);
+            expect(result!.left).toBe(-Config.bot.motor.maxPowerValue);
+            expect(result!.right).toBe(Config.bot.motor.maxPowerValue);
         });
 
         it('calculate values for south-west movement', () => {
@@ -88,8 +87,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(-Config.bot.motor.maxPowerValue / 2);
-            expect(result.right).toBe(-Config.bot.motor.maxPowerValue);
+            expect(result!.left).toBe(-Config.bot.motor.maxPowerValue / 2);
+            expect(result!.right).toBe(-Config.bot.motor.maxPowerValue);
         });
 
         it('calculate values for south movement', () => {
@@ -101,8 +100,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(-Config.bot.motor.maxPowerValue);
-            expect(result.right).toBe(-Config.bot.motor.maxPowerValue);
+            expect(result!.left).toBe(-Config.bot.motor.maxPowerValue);
+            expect(result!.right).toBe(-Config.bot.motor.maxPowerValue);
         });
 
         it('calculate values for south-east movement', () => {
@@ -114,8 +113,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(-Config.bot.motor.maxPowerValue);
-            expect(result.right).toBe(-Config.bot.motor.maxPowerValue / 2);
+            expect(result!.left).toBe(-Config.bot.motor.maxPowerValue);
+            expect(result!.right).toBe(-Config.bot.motor.maxPowerValue / 2);
         });
 
         it('calculate max power percentage', () => {
@@ -127,8 +126,8 @@ describe("BotService spec", () => {
             let result = botService.CalculateMotorValues(values);
 
             expect(result).not.toBeNull();
-            expect(result.left).toBe(Config.bot.motor.maxPowerValue / 2);
-            expect(result.right).toBe(Config.bot.motor.maxPowerValue / 2);
+            expect(result!.left).toBe(Config.bot.motor.maxPowerValue / 2);
+            expect(result!.right).toBe(Config.bot.motor.maxPowerValue / 2);
         });
     });
 });

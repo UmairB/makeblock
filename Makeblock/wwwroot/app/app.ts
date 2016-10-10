@@ -1,4 +1,4 @@
-import 'angular';
+import * as angular from 'angular';
 import 'angular-route';
 import { IAppOptions, IJoystickOptions } from './IAppOptions';
 
@@ -6,8 +6,8 @@ let app = angular.module('app', ['ngRoute']);
 
 // the app config settings
 app.value('appOptions', <IAppOptions>{
-    joystickOptions: { motor: null, servo: null },
-    camera: null
+    joystickOptions: <any>{ motor: null, servo: null },
+    camera: <any>null
 });
 
 app.config(['$routeProvider', '$locationProvider', ($routeProvider: angular.route.IRouteProvider, $locationProvider: angular.ILocationProvider) => {

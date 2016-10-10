@@ -9,7 +9,7 @@ export class Socket {
     private bot: Bot;
     private botService: BotService;
     private sensorDistanceInterval: NodeJS.Timer;
-    private currentClientId: string;
+    private currentClientId: string | null;
 
     constructor(server: http.Server, bot: Bot) {
         this.currentClientId = null;

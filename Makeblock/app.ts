@@ -8,14 +8,16 @@ let args = process.argv.slice(2);
 if (args[0] === "port-list") {
     // just list the usb ports
     Serialport.list((err, ports) => {
-        ports.forEach(p => {
-            console.log(`port: ${JSON.stringify(p)}`);
-        });
+        if (ports) {
+            ports.forEach(p => {
+                console.log(`port: ${JSON.stringify(p)}`);
+            });
+        }
     });
 } else {
     let environment = <string>process.env.NODE_ENV;
     let isProduction = environment && environment.trim() === "production";
-    
+
     let server = new Server();
     server.initRoutes();
 

@@ -1,7 +1,7 @@
 import { list, portConfig } from 'serialport';
 
 export class Serialport {
-    public static list(callback: (err: string, ports: IPort[]) => void) {
+    public static list(callback: (err: string | null, ports: IPort[] | null) => void) {
         list((err, portConfigs) => {
             if (err) {
                 callback(err, null);

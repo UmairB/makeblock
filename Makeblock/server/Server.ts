@@ -3,22 +3,21 @@ import * as http from 'http';
 import * as path from 'path';
 import { Config, IClientConfig } from '../Config';
 import { Socket } from './Socket';
-import { Bot, BotComponent, Motor, Camera } from './bot/module';
+import { Bot, BotComponent, Motor } from './bot/module';
 import { logger } from './log/Logger';
 
-let app: express.Express;
-let server: http.Server;
-let socket: Socket;
-let bot: Bot;
-let camera: Camera;
-
 export class Server {
+    private readonly app: express.Express;
+    private server: http.Server;
+    private socket: Socket;
+    private bot: Bot;
+
     constructor() {
-        app = express();
+        this.app = express();
     }
 
     public initRoutes() {
-        app.use(express.static(path.resolve(__dirname,  `../${Config.webServer.root}`)));
+        this.app.use(express.static(path.resolve(__dirname,  `../${Config.webServer.root}`)));
         
         let apiRouter = express.Router();
         apiRouter.get('/config\.:ext?', function(req, res) {
@@ -37,12 +36,12 @@ export class Server {
             }
         });
 
-        app.use('/api', apiRouter);
+        this.app.use('/api', apiRouter);
     }
 
-    public start(port: number, onStart: (address: string, port: number) => void = null, onError: (err: Error) => void = null) {
-        bot = new Bot(Config.bot, [BotComponent.UltrasonicSensor, BotComponent.Motor, BotComponent.Servo]);
-        bot.initialize((err: Error) => {
+    public start(port: number, onStart: ((address: string, port: number) => void) | null = null, onError: ((err: Error) => void) | null = null) {
+        this.bot = new Bot(Config.bot, [BotComponent.UltrasonicSensor, BotComponent.Motor, BotComponent.Servo]);
+        this.bot.initialize((err: Error) => {
             if (err) {
                 logger.exception(err, 'Error initializing bot');
 
@@ -55,52 +54,41 @@ export class Server {
                 }
             } else {
                 this.onBotInit();
-
-                camera = new Camera();
-                camera.start();
             }
 
             this.initServer(port, onStart);
         });
     }
 
-    public stop(onClose: () => void = null) {
-        bot.shutdown(logger.exception.bind(logger));
-        camera.end();
+    public stop(onClose: (() => void) | null = null) {
+        this.bot.shutdown(logger.exception.bind(logger));
         
-        if (!server) {
-            onClose();
+        if (!this.server) {
+            onClose && onClose();
             return;
         }
 
-        server.close(() => {
-            if (onClose !== null) {
-                onClose();
-            }
+        this.server.close(() => {
+            onClose && onClose();
 
-            socket.close();
-            server.destroy();
-
-            server = undefined;
-            app = undefined;
-            socket = undefined;
-            bot = undefined;
+            this.socket.close();
+            this.server.destroy();
         });
     }
 
-    private initServer(port: number, onStart: (address: string, port: number) => void = null) {
-        server = app.listen(port, () => {
+    private initServer(port: number, onStart: ((address: string, port: number) => void) | null = null) {
+        this.server = this.app.listen(port, () => {
             if (onStart !== null) {
-                var addr = server.address();
+                var addr = this.server.address();
                 onStart(addr.address, addr.port);
             }
         });
 
-        socket = new Socket(server, bot);
-        socket.initSockets();
+        this.socket = new Socket(this.server, this.bot);
+        this.socket.initSockets();
     }
 
     private onBotInit() {
-        bot.getComponent<Motor>(BotComponent.Motor).reset(Config.bot.motor);
+        this.bot.getComponent<Motor>(BotComponent.Motor).reset(Config.bot.motor);
     }
 }

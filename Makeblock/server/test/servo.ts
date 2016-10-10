@@ -3,7 +3,7 @@ import { Slot, IJoystickValues } from "../model/module";
 import { Config } from "../../Config";
 
 let botService = new BotService();
-let bot: Bot;
+let bot: Bot | undefined = undefined;
 
 let running = true;
 while (running) {
@@ -13,7 +13,7 @@ while (running) {
         bot.initialize((err) => {
             console.log('initialized', err);
 
-            let servo = bot.getComponent<Servo>(BotComponent.Servo);
+            let servo = bot!.getComponent<Servo>(BotComponent.Servo);
 
             let value: IJoystickValues = {
                 radialDistance: 0,

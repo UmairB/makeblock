@@ -7,9 +7,9 @@ export interface IMakeblockApiOptions {
 }
 
 export class MakeblockApi {
-    private options: IMakeblockApiOptions;
-    private dataParser: DataParser;
-    private port: SerialPort;
+    private readonly options: IMakeblockApiOptions;
+    private readonly dataParser: DataParser;
+    private readonly port: SerialPort;
 
     public get isOpen(): boolean {
         return this.port.isOpen();
@@ -26,7 +26,7 @@ export class MakeblockApi {
 
     public open(callback: (err: Error) => void) {
         this.initEvents();
-
+        
         this.port.open(function () {
             let err = <Error>arguments[0];
             callback(err);
@@ -59,7 +59,7 @@ export class MakeblockApi {
         this.write([id, action, device, port, slot, angle], callback);
     }
 
-    public ultrasonicSensorRead(port: number, callback: (err: Error, value?: number) => void) {
+    public ultrasonicSensorRead(port: number, callback: (err: Error | null, value?: number) => void) {
         let action = 1;
         let device = 1;
         let id = ((port << 4) + device) & 0xff;
@@ -69,7 +69,7 @@ export class MakeblockApi {
         }
     }
 
-    private write(buffer: Array<number>, callback: (err: Error) => void) {
+    private write(buffer: Array<number>, callback?: (err: Error) => void) {
         if (this.port.isOpen) {
             var buf = new Buffer([0xff, 0x55, buffer.length + 1].concat(buffer).concat([0xa]));
 
@@ -88,7 +88,9 @@ export class MakeblockApi {
     private initEvents() {
         this.port.on('open', () => {
             this.port.on('data', this.dataParser.Parse.bind(this.dataParser));
-            this.port.on('error', this.options.onPortError.bind(this.options));
+            if (typeof this.options.onPortError === "function") {
+                this.port.on('error', this.options.onPortError.bind(this.options));
+            }
         });
     }
 }

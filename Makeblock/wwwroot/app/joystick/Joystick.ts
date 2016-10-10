@@ -55,7 +55,7 @@ export class Joystick {
         });
     }
 
-    private calculateAngle(angle: number) : number {
+    private calculateAngle(angle: number) : number | undefined {
         let angleThreshold = this.options.angleThreshold;
         if (360 % angleThreshold === 0) {
             angleThreshold = 0;

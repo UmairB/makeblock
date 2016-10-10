@@ -11,5 +11,6 @@
         "/**/*.css.map": true,
         "node_modules": true,
         "obj": true
-    }
+    },
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

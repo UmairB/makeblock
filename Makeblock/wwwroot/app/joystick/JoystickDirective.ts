@@ -16,9 +16,12 @@ export function joystickFactory(): IJoystickFactory {
     };
 }
 
-interface IJoystickDirectiveScope extends angular.IScope {
-    api: IJoystickApi,
-    options: IJoystickOptions
+interface IJoystickDirectiveViewModel {
+    options: IJoystickOptions,
+    api: IJoystickApi
+}
+
+interface IJoystickDirectiveScope extends IJoystickDirectiveViewModel, angular.IScope {
 }
 
 @directive()
@@ -26,9 +29,9 @@ export class JoystickDirective implements angular.IDirective {
     public template: string = '<div class="joystick"></div>';
     public restrict: string = 'E';
     public replace: boolean = true;
-    public scope: Object = {
-        options: '<',
-        api: '<'
+    public scope: any = <IJoystickDirectiveViewModel>{
+        options: <any>'<',
+        api: <any>'<'
     };
 
     public link: Function = (scope: IJoystickDirectiveScope, element: angular.IAugmentedJQuery, attrs: angular.IAttributes): void => {
@@ -41,4 +44,4 @@ export class JoystickDirective implements angular.IDirective {
 
 angular.module('app')
     .factory('joystickFactory', [joystickFactory])
-    .directive('joystick', ['joystickFactory', JoystickDirective]);
+    .directive('joystick', ['joystickFactory', <any>JoystickDirective]);

@@ -6,8 +6,8 @@ let IMAGE_PATH = '/tmp/stream',
     IMAGE_NAME = 'pic.jpg';
 
 export class Camera {
-    private cameraProcess: ChildProcess;
-    private streamingProcess: ChildProcess;
+    private cameraProcess: ChildProcess | null;
+    private streamingProcess: ChildProcess | null;
 
     public start() {
         try {

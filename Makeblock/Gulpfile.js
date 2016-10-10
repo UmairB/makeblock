@@ -65,7 +65,7 @@ var tsProject = ts.createProject(path.resolve('./tsconfig.json'));
 gulp.task('build:typescript', function () {
     return tsProject.src()
         //.pipe(sourcemaps.init())
-        .pipe(ts(tsProject))
+        .pipe(tsProject())
         .on('error', notify.onError({
             onLast: true,
             title: 'TypeScript',
