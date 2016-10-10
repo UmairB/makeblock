@@ -1,5 +1,5 @@
-import { IMotorConfig, IPortConfig } from '../../Config';
-import { MakeblockApi } from '../api/MakeblockApi';
+import { IMotorConfig, IPortConfig } from "../../Config";
+import { MakeblockApi } from "../api/MakeblockApi";
 import { Camera } from "./Camera";
 import { Slot } from "../model/Slot";
 
@@ -14,13 +14,13 @@ export class Bot {
     private readonly _camera: Camera;
     private readonly _components: { [id: string]: IBotComponent | null };
 
-    public get isInitialized() : boolean {
+    public get isInitialized(): boolean {
         return this._bot.isOpen;
     }
 
     constructor(config: IPortConfig, components: Array<BotComponent>) {
-        this._bot = new MakeblockApi({ 
-            port: config.port, 
+        this._bot = new MakeblockApi({
+            port: config.port,
             baudrate: config.baudrate,
             onPortError: (err) => console.log(err)
         });
@@ -40,14 +40,14 @@ export class Bot {
         this._camera.start();
 
         for (let key in this._components) {
-            let ctor = eval(key);
+            let ctor = /* tslint:disable */eval(key);/* tslint:enable */
             let component: IBotComponent = new ctor(this._bot);
 
             this._components[key] = component;
         }
     }
 
-    public shutdown(callback?: (err: Error) => void) : boolean {
+    public shutdown(callback?: (err: Error) => void): boolean {
         this._camera.end();
         if (this._bot.isOpen) {
             this._bot.close(callback);
@@ -59,7 +59,7 @@ export class Bot {
 }
 
 export interface IBotComponent {
-    botComponent: BotComponent
+    botComponent: BotComponent;
 }
 
 export class UltrasonicSensor implements IBotComponent {

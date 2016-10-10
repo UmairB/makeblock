@@ -1,11 +1,11 @@
-import * as angular from 'angular';
-import { Joystick, IJoystickApi } from './Joystick';
-import { IJoystickOptions } from '../IAppOptions';
-import { directive } from '../../decorators/directive';
-import '../app';
+import * as angular from "angular";
+import { Joystick, IJoystickApi } from "./Joystick";
+import { IJoystickOptions } from "../IAppOptions";
+import { directive } from "../../decorators/directive";
+import "../app";
 
 interface IJoystickFactory {
-    create: (options: IJoystickOptions, api: IJoystickApi, element: angular.IAugmentedJQuery) => Joystick
+    create: (options: IJoystickOptions, api: IJoystickApi, element: angular.IAugmentedJQuery) => Joystick;
 }
 
 export function joystickFactory(): IJoystickFactory {
@@ -17,8 +17,8 @@ export function joystickFactory(): IJoystickFactory {
 }
 
 interface IJoystickDirectiveViewModel {
-    options: IJoystickOptions,
-    api: IJoystickApi
+    options: IJoystickOptions;
+    api: IJoystickApi;
 }
 
 interface IJoystickDirectiveScope extends IJoystickDirectiveViewModel, angular.IScope {
@@ -26,12 +26,12 @@ interface IJoystickDirectiveScope extends IJoystickDirectiveViewModel, angular.I
 
 @directive()
 export class JoystickDirective implements angular.IDirective {
-    public template: string = '<div class="joystick"></div>';
-    public restrict: string = 'E';
+    public template: string = `<div class="joystick"></div>`;
+    public restrict: string = "E";
     public replace: boolean = true;
     public scope: any = <IJoystickDirectiveViewModel>{
-        options: <any>'<',
-        api: <any>'<'
+        options: <any>"<",
+        api: <any>"<"
     };
 
     public link: Function = (scope: IJoystickDirectiveScope, element: angular.IAugmentedJQuery, attrs: angular.IAttributes): void => {
@@ -42,6 +42,6 @@ export class JoystickDirective implements angular.IDirective {
     }
 }
 
-angular.module('app')
-    .factory('joystickFactory', [joystickFactory])
-    .directive('joystick', ['joystickFactory', <any>JoystickDirective]);
+angular.module("app")
+    .factory("joystickFactory", [joystickFactory])
+    .directive("joystick", ["joystickFactory", <any>JoystickDirective]);

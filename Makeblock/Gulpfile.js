@@ -1,12 +1,14 @@
 "use strict";
 
 const gulp = require('gulp'),
-      path = require('path'),
-      ts = require('gulp-typescript'),
-      sass = require("gulp-sass"),
-      sourcemaps = require('gulp-sourcemaps'),
-      jasmine = require('gulp-jasmine'),
-      notify = require('gulp-notify');
+    path = require('path'),
+    ts = require('gulp-typescript'),
+    gulp_tslint = require('gulp-tslint'),
+    tslint = require('tslint'),
+    sass = require("gulp-sass"),
+    sourcemaps = require('gulp-sourcemaps'),
+    jasmine = require('gulp-jasmine'),
+    notify = require('gulp-notify');
 
 var paths = {
     webroot: "./wwwroot/",
@@ -18,6 +20,7 @@ paths.lib = paths.webroot + 'lib/';
 paths.app = paths.webroot + "app/";
 paths.sass = paths.app + "**/*.scss";
 paths.typescript = "./**/*.ts";
+paths.tsConfig = path.resolve('./tsconfig.json');
 paths.resource = {
     typescript: paths.gulp + 'resource/ts.png',
     sass: paths.gulp + 'resource/sass.png'
@@ -26,7 +29,7 @@ paths.ignore = {
     npm: '!' + paths.npm + '/**'
 };
 
-var libs = {
+const libs = {
     'es6-shim': {
         libs: [
             paths.npm + 'es6-shim/es6-shim.js'
@@ -52,6 +55,17 @@ var libs = {
     }
 };
 
+let tsLint = function (files, emitError) {
+    var files = Array.isArray(files) ? files : [files];
+    return gulp.src(files)
+        .pipe(gulp_tslint({
+            formatter: "verbose"
+        }))
+        .pipe(gulp_tslint.report({
+            emitError: !!emitError
+        }));
+};
+
 gulp.task('libs', function () {
     for (var lib in libs) {
         var libObj = libs[lib],
@@ -61,7 +75,7 @@ gulp.task('libs', function () {
     }
 });
 
-var tsProject = ts.createProject(path.resolve('./tsconfig.json'));
+const tsProject = ts.createProject(paths.tsConfig);
 gulp.task('build:typescript', function () {
     return tsProject.src()
         //.pipe(sourcemaps.init())
@@ -79,7 +93,7 @@ gulp.task('build:typescript', function () {
             onLast: true,
             title: 'TypeScript',
             message: 'Typescript compilation completed',
-            icon: paths.resource.typescript 
+            icon: paths.resource.typescript
         }));
 });
 
@@ -92,6 +106,10 @@ gulp.task('build:sass', function () {
         .pipe(gulp.dest(function (file) { return file.base; }));
 });
 
+const program = tslint.createProgram(paths.tsConfig);
+const files = program.getRootFileNames();
+gulp.task('tslint', function () { return tsLint(files, true); });
+
 // jasmine tests
 gulp.task('jasmine', function () {
     return gulp.src(['./**/*.spec.js', paths.ignore.npm])
@@ -102,7 +120,10 @@ gulp.task('jasmine', function () {
 // watch task
 gulp.task('watch', function () {
     gulp.watch(paths.sass, ['build:sass']);
-    gulp.watch([paths.typescript, paths.ignore.npm], ['build:typescript']);
+    gulp.watch([paths.typescript, paths.ignore.npm], ['build:typescript'])
+        .on('change', (file) => {
+            tsLint(file.path);
+        });
 });
 // watch jasmine
 gulp.task('watch:jasmine', function () {

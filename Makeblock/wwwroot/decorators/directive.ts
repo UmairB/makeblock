@@ -10,7 +10,8 @@ export function directive(...values: string[]): any {
                 return null;
             });
         };
-        //directive.$inject = values;
+
+        // directive.$inject = values;
         return directive;
     };
 }

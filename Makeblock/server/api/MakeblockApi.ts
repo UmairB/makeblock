@@ -1,9 +1,9 @@
-import { SerialPort } from 'serialport';
+import { SerialPort } from "serialport";
 
 export interface IMakeblockApiOptions {
-    port: string,
-    baudrate: number,
-    onPortError?: (err) => void
+    port: string;
+    baudrate: number;
+    onPortError?: (err) => void;
 }
 
 export class MakeblockApi {
@@ -26,15 +26,15 @@ export class MakeblockApi {
 
     public open(callback: (err: Error) => void) {
         this.initEvents();
-        
+
         this.port.open(function () {
             let err = <Error>arguments[0];
             callback(err);
-        });;
+        });
     }
 
     public close(callback?: (err: Error) => void) {
-        let close: any = this.port['close'].bind(this.port);
+        let close: any = this.port["close"].bind(this.port);
         close(callback);
     }
 
@@ -44,7 +44,7 @@ export class MakeblockApi {
         let device = 0xa;
         let spd = Utils.getBytesFromShort(speed);
 
-        this.write([id, action, device, port].concat(spd), callback)
+        this.write([id, action, device, port].concat(spd), callback);
     }
 
     public dcMotorStop(port: number, callback?: (err: Error) => void) {
@@ -71,7 +71,7 @@ export class MakeblockApi {
 
     private write(buffer: Array<number>, callback?: (err: Error) => void) {
         if (this.port.isOpen) {
-            var buf = new Buffer([0xff, 0x55, buffer.length + 1].concat(buffer).concat([0xa]));
+            let buf = new Buffer([0xff, 0x55, buffer.length + 1].concat(buffer).concat([0xa]));
 
             this.port.write(buf, (err, bytesWritten) => {
                 if (err && callback) {
@@ -86,10 +86,10 @@ export class MakeblockApi {
     }
 
     private initEvents() {
-        this.port.on('open', () => {
-            this.port.on('data', this.dataParser.Parse.bind(this.dataParser));
+        this.port.on("open", () => {
+            this.port.on("data", this.dataParser.Parse.bind(this.dataParser));
             if (typeof this.options.onPortError === "function") {
-                this.port.on('error', this.options.onPortError.bind(this.options));
+                this.port.on("error", this.options.onPortError.bind(this.options));
             }
         });
     }
@@ -113,19 +113,19 @@ class DataParser {
             this.buffer.push(readBuffer[i]);
             let len = this.buffer.length;
             if (len >= 2) {
-                if (this.buffer[len - 1] == 0x55 && this.buffer[len - 2] == 0xff) {
+                if (this.buffer[len - 1] === 0x55 && this.buffer[len - 2] === 0xff) {
                     this.isParseStart = true;
                     this.isParseStartIndex = len - 2;
                 }
 
-                if (this.buffer[len - 1] == 0xa && this.buffer[len - 2] == 0xd && this.isParseStart == true) {
+                if (this.buffer[len - 1] === 0xa && this.buffer[len - 2] === 0xd && this.isParseStart === true) {
                     this.isParseStart = false;
                     let position = this.isParseStartIndex + 2;
                     let extId = this.buffer[position];
                     position += 1;
                     let type = this.buffer[position];
                     let value = 0;
-                    position += 1;//# 1 byte 2 float 3 short 4 len+string 5 double 6 long
+                    position += 1; // # 1 byte 2 float 3 short 4 len+string 5 double 6 long
 
                     switch (type) {
                         case 1:
@@ -174,57 +174,57 @@ class DataParser {
 
 class Utils {
     public static getShortFromBytes(v) {
-        var buf = new ArrayBuffer(2);
-        var i = new Uint8Array(buf);
+        let buf = new ArrayBuffer(2);
+        let i = new Uint8Array(buf);
         i[0] = v[0];
         i[1] = v[1];
-        var s = new Int16Array(buf);
+        let s = new Int16Array(buf);
         return s[0];
     }
 
     public static getFloatFromBytes(v) {
-        var buf = new ArrayBuffer(4);
-        var i = new Uint8Array(buf);
+        let buf = new ArrayBuffer(4);
+        let i = new Uint8Array(buf);
         i[0] = v[0];
         i[1] = v[1];
         i[2] = v[2];
         i[3] = v[3];
-        var f = new Float32Array(buf);
+        let f = new Float32Array(buf);
         return f[0];
     }
 
     public static getLongFromBytes(v) {
-        var buf = new ArrayBuffer(4);
-        var i = new Uint8Array(buf);
+        let buf = new ArrayBuffer(4);
+        let i = new Uint8Array(buf);
         i[0] = v[0];
         i[1] = v[1];
         i[2] = v[2];
         i[3] = v[3];
-        var l = new Int32Array(buf);
+        let l = new Int32Array(buf);
         return l[0];
     }
 
     public static getBytesFromShort(v) {
-        var buf = new ArrayBuffer(2);
-        var s = new Int16Array(buf);
+        let buf = new ArrayBuffer(2);
+        let s = new Int16Array(buf);
         s[0] = v;
-        var i = new Uint8Array(buf);
+        let i = new Uint8Array(buf);
         return [i[0], i[1]];
     }
 
     public static getBytesFromFloat(v) {
-        var buf = new ArrayBuffer(4);
-        var f = new Float32Array(buf);
+        let buf = new ArrayBuffer(4);
+        let f = new Float32Array(buf);
         f[0] = v;
-        var i = new Uint8Array(buf);
+        let i = new Uint8Array(buf);
         return [i[0], i[1], i[2], i[3]];
     }
 
     public static getBytesFromLong(v) {
-        var buf = new ArrayBuffer(4);
-        var l = new Int32Array(buf);
+        let buf = new ArrayBuffer(4);
+        let l = new Int32Array(buf);
         l[0] = v;
-        var i = new Uint8Array(buf);
+        let i = new Uint8Array(buf);
         return [i[0], i[1], i[2], i[3]];
     }
 }

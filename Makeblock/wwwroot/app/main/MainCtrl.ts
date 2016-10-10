@@ -1,8 +1,8 @@
-import * as angular from 'angular';
-import * as io from 'socket.io-client';
-import '../app';
-import { IAppOptions, IJoystickOptions } from '../IAppOptions';
-import { IJoystickApi } from '../joystick/Joystick';
+import * as angular from "angular";
+import * as io from "socket.io-client";
+import "../app";
+import { IAppOptions, IJoystickOptions } from "../IAppOptions";
+import { IJoystickApi } from "../joystick/Joystick";
 
 enum connectionState {
     connected,
@@ -10,12 +10,12 @@ enum connectionState {
 }
 
 interface IViewModel {
-    distance: string,
-    joystick: IJoystick,
-    checkingAvailability: boolean,
-    joystickDisabled: boolean,
-    connectionState: string,
-    connectButton: IConnectButton
+    distance: string;
+    joystick: IJoystick;
+    checkingAvailability: boolean;
+    joystickDisabled: boolean;
+    connectionState: string;
+    connectButton: IConnectButton;
 }
 
 interface IJoystick {
@@ -30,9 +30,9 @@ interface IJoystick {
 }
 
 interface IConnectButton {
-    text: string,
-    disabled: boolean,
-    click: () => void
+    text: string;
+    disabled: boolean;
+    click: () => void;
 }
 
 export class MainCtrl implements IViewModel {
@@ -50,7 +50,7 @@ export class MainCtrl implements IViewModel {
         this.checkingAvailability = true;
         this.joystickDisabled = false;
         this.connectButton = {
-            text: 'Connect',
+            text: "Connect",
             disabled: true,
             click: this.toggleJoystickConnection.bind(this)
         };
@@ -63,9 +63,9 @@ export class MainCtrl implements IViewModel {
     private toggleJoystickConnection() {
         let event;
         if (this.connectionState === connectionState[connectionState.connected]) {
-            event += 'joystick disconnected';
+            event += "joystick disconnected";
         } else if (!this.connectButton.disabled) {
-            event += 'joystick connection';
+            event += "joystick connection";
         }
 
         if (event) {
@@ -86,38 +86,38 @@ export class MainCtrl implements IViewModel {
                     }
                 }
             };
-        } 
+        };
 
         this.joystick = {
             motor: {
                 options: appOptions.joystickOptions.motor,
-                api: api('motor')
+                api: api("motor")
             },
             servo: {
                 options: appOptions.joystickOptions.servo,
-                api: api('servo')
+                api: api("servo")
             }
-        }
+        };
     }
 
     private initSockets() {
         this.socket = io();
 
         // sensor distance
-        this.socket.on('sensor distance', (value) => {
+        this.socket.on("sensor distance", (value) => {
             this.$scope.$applyAsync((s) => this.distance = value.distance);
         });
 
-        this.socket.on('joystick connectable', (available: boolean) => {
+        this.socket.on("joystick connectable", (available: boolean) => {
             this.$scope.$applyAsync((s) => this.connectButton.disabled = !available);
         });
 
-        this.socket.on('joystick connected', (connected: boolean) => {
+        this.socket.on("joystick connected", (connected: boolean) => {
             this.$scope.$applyAsync((s) => {
                 this.checkingAvailability = false;
                 this.joystickDisabled = !connected;
                 this.connectionState = connectionState[connected ? connectionState.connected : connectionState.disconnected];
-                this.connectButton.text = connected ? 'Disconnect' : 'Connect';
+                this.connectButton.text = connected ? "Disconnect" : "Connect";
                 if (connected) {
                     this.connectButton.disabled = false;
                 }
@@ -126,5 +126,5 @@ export class MainCtrl implements IViewModel {
     }
 }
 
-angular.module('app')
-    .controller('mainCtrl', ['$scope', 'appOptions', MainCtrl]);
+angular.module("app")
+    .controller("mainCtrl", ["$scope", "appOptions", MainCtrl]);

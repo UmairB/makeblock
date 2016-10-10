@@ -1,4 +1,4 @@
-import { list, portConfig } from 'serialport';
+import { list } from "serialport";
 
 export class Serialport {
     public static list(callback: (err: string | null, ports: IPort[] | null) => void) {

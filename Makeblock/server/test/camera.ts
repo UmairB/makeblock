@@ -1,10 +1,10 @@
 import { Camera } from "../bot/Camera";
 
-var camera = new Camera();
+let camera = new Camera();
 camera.start();
 
 let onExit = () => {
     camera.end();
 };
 
-process.on('exit', onExit);
+process.on("exit", onExit);

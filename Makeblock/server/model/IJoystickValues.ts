@@ -1,4 +1,4 @@
 export interface IJoystickValues {
-    radialDistance: number,
-    angle: number
+    radialDistance: number;
+    angle: number;
 }

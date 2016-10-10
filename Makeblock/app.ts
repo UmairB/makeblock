@@ -1,8 +1,8 @@
-/// <reference path='./typings/index.d.ts' />
-import { Config } from './Config';
-import { Server } from './server/Server';
-import { logger } from './server/log/Logger';
-import { Serialport } from './server/Serialport';
+/// <reference path="./typings/index.d.ts" />
+import { Config } from "./Config";
+import { Server } from "./server/Server";
+import { logger } from "./server/log/Logger";
+import { Serialport } from "./server/Serialport";
 
 let args = process.argv.slice(2);
 if (args[0] === "port-list") {
@@ -26,22 +26,22 @@ if (args[0] === "port-list") {
 
         if (!isProduction) {
             // open the documentation page (hopefully in a browser)
-            let open = require('open');
+            let open = require("open");
             open(`http://localhost:${port}`);
         }
     });
 
     let onExit = () => {
         server.stop(() => {
-            logger.info('Turning off server');
+            logger.info("Turning off server");
         });
     };
 
-    process.on('exit', onExit);
+    process.on("exit", onExit);
 
     // //catches ctrl+c event
-    // process.on('SIGINT', onExit);
+    // process.on("SIGINT", onExit);
 
     // //catches uncaught exceptions
-    // process.on('uncaughtException', onExit);
+    // process.on("uncaughtException", onExit);
 }

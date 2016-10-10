@@ -1,5 +1,5 @@
-import { Config } from '../../Config';
-import { IJoystickValues, IMotorValues, IServoValues, Slot } from '../model/module';
+import { Config } from "../../Config";
+import { IJoystickValues, IMotorValues, IServoValues, Slot } from "../model/module";
 
 const joystickConfig = Config.client.joystick;
 const maxPowerValue = Config.bot.motor.maxPowerValue;
@@ -74,7 +74,7 @@ export class BotService {
         }
 
         if (value.angle >= 360) {
-            value.angle =- 360;
+            value.angle -= 360;
         }
     }
 }

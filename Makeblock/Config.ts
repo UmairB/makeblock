@@ -69,7 +69,7 @@ export interface IClientConfig {
     };
 }
 
-//port: COM3,/dev/ttyUSB0
+// port: COM3,/dev/ttyUSB0
 export const Config = <IConfig>{
     "botRequired": false,
     "webServer": {
@@ -79,22 +79,22 @@ export const Config = <IConfig>{
     "bot": {
         "port": "COM3",
         "baudrate": 115200,
-        "ultrasonicSensor": { 
+        "ultrasonicSensor": {
             "port": 4,
-            "refreshInterval": 1000 
+            "refreshInterval": 1000
         },
-        "servo": { 
+        "servo": {
             "port": 3,
             "slot": {
                 "1": {
                     "neutral": 67,
                     "minValue": 10,
                     "maxValue": 130
-                } 
+                }
             }
          },
         "motor": {
-            "maxPowerValue": 255, 
+            "maxPowerValue": 255,
             "left": { port: 9 },
             "right": { port: 10 }
         }

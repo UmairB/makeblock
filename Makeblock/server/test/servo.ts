@@ -1,4 +1,4 @@
-import { Bot, BotComponent, Servo, BotService } from "../bot/module"
+import { Bot, BotComponent, Servo, BotService } from "../bot/module";
 import { Slot, IJoystickValues } from "../model/module";
 import { Config } from "../../Config";
 
@@ -8,10 +8,10 @@ let bot: Bot | undefined = undefined;
 let running = true;
 while (running) {
     if (!bot) {
-        console.log('running');
+        console.log("running");
         bot = new Bot(Config.bot, [BotComponent.Servo]);
         bot.initialize((err) => {
-            console.log('initialized', err);
+            console.log("initialized", err);
 
             let servo = bot!.getComponent<Servo>(BotComponent.Servo);
 

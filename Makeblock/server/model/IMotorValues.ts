@@ -1,4 +1,4 @@
 export interface IMotorValues {
-    left: number,
-    right: number
+    left: number;
+    right: number;
 }

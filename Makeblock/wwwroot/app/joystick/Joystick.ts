@@ -1,11 +1,11 @@
 declare var nipplejs: any;
-import { IJoystickOptions } from '../IAppOptions';
+import { IJoystickOptions } from "../IAppOptions";
 
 export interface IJoystickApi {
     event: {
         onMove: (radialDistance, angle) => void,
         onEnd: () => void
-    }
+    };
 }
 
 export class Joystick {
@@ -19,9 +19,9 @@ export class Joystick {
         this.joystick = nipplejs.create({
             zone: this.joystickElement,
             size: this.options.radius * 2,
-            mode: 'static',
-            position: { left: '50%', top: '50%' },
-            color: 'red'
+            mode: "static",
+            position: { left: "50%", top: "50%" },
+            color: "red"
         });
 
         // set up events
@@ -32,14 +32,14 @@ export class Joystick {
     }
 
     private onEnd() {
-        this.joystick.on('end', this.api.event.onEnd.bind(this.api.event));
+        this.joystick.on("end", this.api.event.onEnd.bind(this.api.event));
     }
 
     private onMove() {
         let radialThreshold = this.options.radialThreshold;
 
         let currentValue = { angle: 0, distance: 0 };
-        this.joystick.on('move', (obj, data) => {
+        this.joystick.on("move", (obj, data) => {
             let angle = data.angle.degree,
                 radialDistance = data.distance;
 
@@ -55,7 +55,7 @@ export class Joystick {
         });
     }
 
-    private calculateAngle(angle: number) : number | undefined {
+    private calculateAngle(angle: number): number | undefined {
         let angleThreshold = this.options.angleThreshold;
         if (360 % angleThreshold === 0) {
             angleThreshold = 0;
