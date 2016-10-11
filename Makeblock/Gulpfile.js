@@ -118,9 +118,12 @@ gulp.task('jasmine', function () {
 });
 
 // watch task
-gulp.task('watch', function () {
-    gulp.watch(paths.sass, ['build:sass']);
-    gulp.watch([paths.typescript, paths.ignore.npm], ['build:typescript'])
+gulp.task('watch', ['watch:sass', 'watch:typescript']);
+gulp.task('watch:sass', function () {
+    return gulp.watch(paths.sass, ['build:sass']);
+});
+gulp.task('watch:typescript', ['build:typescript'], function () {
+    return gulp.watch([paths.typescript, paths.ignore.npm], ['build:typescript'])
         .on('change', (file) => {
             tsLint(file.path);
         });

@@ -5,7 +5,9 @@
         "removeComments": false,
         "sourceMap": true,
         "target": "es5",
+        "lib": ["es6", "dom"],
         "module": "commonjs",
+        "moduleResolution": "node",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "strictNullChecks": true      

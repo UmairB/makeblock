@@ -1,18 +1,23 @@
+import { injectable, inject } from "inversify";
 import * as express from "express";
 import * as http from "http";
 import * as path from "path";
 import { Config } from "../Config";
 import { Socket } from "./Socket";
 import { Bot, BotComponent, Motor } from "./bot/module";
-import { logger } from "./log/Logger";
+import { ILogger, LOGGER_TYPES } from "./log/Logger";
 
+@injectable()
 export class Server {
+    private readonly logger: ILogger;
     private readonly app: express.Express;
     private server: http.Server;
     private socket: Socket;
     private bot: Bot;
 
-    constructor() {
+    constructor(@inject(LOGGER_TYPES.Logger) logger: ILogger) {
+        this.logger = logger;
+
         this.app = express();
     }
 
@@ -43,7 +48,7 @@ export class Server {
         this.bot = new Bot(Config.bot, [BotComponent.UltrasonicSensor, BotComponent.Motor, BotComponent.Servo]);
         this.bot.initialize((err: Error) => {
             if (err) {
-                logger.exception(err, "Error initializing bot");
+                this.logger.exception(err, "Error initializing bot");
 
                 if (onError !== null) {
                     onError(err);
@@ -61,7 +66,7 @@ export class Server {
     }
 
     public stop(onClose: (() => void) | null = null) {
-        this.bot.shutdown(logger.exception.bind(logger));
+        this.bot.shutdown(this.logger.exception.bind(this.logger));
 
         if (!this.server) {
             if (onClose !== null) { onClose(); }

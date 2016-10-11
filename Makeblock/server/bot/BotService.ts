@@ -1,10 +1,18 @@
+import { injectable } from "inversify";
 import { Config } from "../../Config";
 import { IJoystickValues, IMotorValues, IServoValues, Slot } from "../model/module";
 
 const joystickConfig = Config.client.joystick;
 const maxPowerValue = Config.bot.motor.maxPowerValue;
 
-export class BotService {
+export interface IBotService {
+    CalculateMotorValues: (value: IJoystickValues | null) => IMotorValues | null;
+    CaculateServoValues: (value: IJoystickValues | null) => IServoValues | null;
+    ResetServos: () => IServoValues;
+}
+
+@injectable()
+export class BotService implements IBotService {
     public CalculateMotorValues(value: IJoystickValues | null): IMotorValues | null {
         let motorValues: IMotorValues | null = null;
         if (value !== null) {
@@ -78,6 +86,10 @@ export class BotService {
         }
     }
 }
+
+export const BOTSERVICE_TYPES = {
+    BotService: Symbol("BotService")
+};
 
 /*
     DC Motors have values in the range 255 to -255

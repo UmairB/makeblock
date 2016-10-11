@@ -1,4 +1,5 @@
 /// <reference path="./typings/index.d.ts" />
+import kernel from "./inversify.config";
 import { Config } from "./Config";
 import { Server } from "./server/Server";
 import { logger } from "./server/log/Logger";
@@ -18,7 +19,7 @@ if (args[0] === "port-list") {
     let environment = <string>process.env.NODE_ENV;
     let isProduction = environment && environment.trim() === "production";
 
-    let server = new Server();
+    let server = kernel.get(Server);
     server.initRoutes();
 
     server.start(Config.webServer.port, (address, port) => {

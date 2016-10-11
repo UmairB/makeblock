@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import * as winston from "winston";
 import * as path from "path";
 import * as fs from "fs";
@@ -14,6 +15,14 @@ catch (e) {
     }
 }
 
+export interface ILogger {
+    info: (msg: string) => void;
+    warn: (msg: string) => void;
+    error: (msg: string) => void;
+    exception: (error: Error, msg?: string) => void;
+}
+
+@injectable()
 export class Logger {
     private logger: winston.LoggerInstance;
 
@@ -58,4 +67,8 @@ export class Logger {
     }
 }
 
-export let logger = new Logger();
+export const logger = new Logger();
+
+export const LOGGER_TYPES = {
+    Logger: Symbol("Logger")
+};
