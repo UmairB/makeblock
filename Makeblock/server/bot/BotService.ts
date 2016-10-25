@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import { Config } from "../../Config";
-import { IJoystickValues, IMotorValues, IServoValues, Slot } from "../model/module";
+import { IJoystickValues, IMotorValues, IServoValues, Slot } from "../model";
+import { Bot, Motor, BotComponent } from "./index";
 
 const joystickConfig = Config.client.joystick;
 const maxPowerValue = Config.bot.motor.maxPowerValue;
@@ -8,6 +9,7 @@ const maxPowerValue = Config.bot.motor.maxPowerValue;
 export interface IBotService {
     CalculateMotorValues: (value: IJoystickValues | null) => IMotorValues | null;
     CaculateServoValues: (value: IJoystickValues | null) => IServoValues | null;
+    ResetMotors: (bot: Bot) => void;
     ResetServos: () => IServoValues;
 }
 
@@ -67,6 +69,12 @@ export class BotService implements IBotService {
         }
 
         return servoValues;
+    }
+
+    public ResetMotors(bot: Bot): void {
+        let motor = bot.getComponent<Motor>(BotComponent.Motor);
+        motor.stop(Config.bot.motor.left.port);
+        motor.stop(Config.bot.motor.right.port);
     }
 
     public ResetServos(): IServoValues {

@@ -51,6 +51,15 @@ export class MakeblockApi {
         this.dcMotorRun(port, 0, callback);
     }
 
+    public encoderMotorRun(slot: number, speed: number) {
+        let id = 0;
+        let action = 2;
+        let device = 61;
+        let spd = Utils.getBytesFromShort(speed);
+
+        this.write([id, action, device, 0, slot, 1].concat(spd));
+    }
+
     public servoRun(port: number, slot: number, angle: number, callback?: (err: Error) => void) {
         let id = 0;
         let action = 2;

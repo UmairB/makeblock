@@ -1,23 +1,38 @@
+import { injectable, inject } from "inversify";
 import * as socket from "socket.io";
 import * as http from "http";
 import { Config } from "../Config";
-import { Bot, BotService, BotComponent, UltrasonicSensor, Motor, Servo } from "./bot/module";
-import { IJoystickValues, Slot } from "./model/module";
+import { Bot, IBotService, BOTSERVICE_TYPES, BotComponent, UltrasonicSensor, Motor, Servo } from "./bot";
+import { IJoystickValues, Slot } from "./model";
+
+export interface ISocketFactory {
+    create: (server: http.Server, bot: Bot) => Socket;
+}
+
+@injectable()
+export class SocketFactory implements ISocketFactory {
+    constructor(@inject(BOTSERVICE_TYPES.BotService) private botService: IBotService) {
+    }
+
+    public create(server: http.Server, bot: Bot): Socket {
+        let io = socket(server);
+        return new Socket(io, bot, this.botService);
+    }
+}
 
 export class Socket {
     private io: SocketIO.Server;
     private bot: Bot;
-    private botService: BotService;
+    private botService: IBotService;
     private sensorDistanceInterval: NodeJS.Timer;
     private currentClientId: string | null;
 
-    constructor(server: http.Server, bot: Bot) {
+    constructor(io: SocketIO.Server, bot: Bot, botService: IBotService) {
         this.currentClientId = null;
 
-        this.io = socket(server);
+        this.io = io;
         this.bot = bot;
-
-        this.botService = new BotService();
+        this.botService = botService;
     }
 
     public initSockets() {
@@ -60,7 +75,7 @@ export class Socket {
 
             socket.on("motor reset", () => {
                 if (this.currentClientId === socket.client.id) {
-                    motor.reset(Config.bot.motor);
+                    this.botService.ResetMotors(this.bot);
                 }
             });
 
@@ -115,3 +130,7 @@ export class Socket {
         }
     }
 }
+
+export const SOCKET_TYPES = {
+    SocketFactory: Symbol("SocketFactory")
+};

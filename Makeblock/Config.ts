@@ -92,7 +92,7 @@ export const Config = <IConfig>{
                     "maxValue": 130
                 }
             }
-         },
+        },
         "motor": {
             "maxPowerValue": 255,
             "left": { port: 9 },

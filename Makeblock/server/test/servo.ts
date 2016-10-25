@@ -1,5 +1,5 @@
-import { Bot, BotComponent, Servo, BotService } from "../bot/module";
-import { Slot, IJoystickValues } from "../model/module";
+import { Bot, BotComponent, Servo, BotService } from "../bot";
+import { Slot, IJoystickValues } from "../model";
 import { Config } from "../../Config";
 
 let botService = new BotService();

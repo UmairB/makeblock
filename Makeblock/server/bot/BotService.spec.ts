@@ -1,5 +1,5 @@
 import { BotService } from "./BotService";
-import { IJoystickValues } from "../model/module";
+import { IJoystickValues } from "../model";
 import { Config } from "../../Config";
 
 let motorConfig = Config.client.joystick.motor;

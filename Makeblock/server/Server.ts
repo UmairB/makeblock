@@ -3,20 +3,24 @@ import * as express from "express";
 import * as http from "http";
 import * as path from "path";
 import { Config } from "../Config";
-import { Socket } from "./Socket";
-import { Bot, BotComponent, Motor } from "./bot/module";
+import { ISocketFactory, Socket, SOCKET_TYPES } from "./Socket";
+import { Bot, BotComponent, IBotService, BOTSERVICE_TYPES } from "./bot";
 import { ILogger, LOGGER_TYPES } from "./log/Logger";
 
 @injectable()
 export class Server {
+    private readonly socketFactory: ISocketFactory;
     private readonly logger: ILogger;
+    private readonly botService: IBotService;
     private readonly app: express.Express;
     private server: http.Server;
     private socket: Socket;
     private bot: Bot;
 
-    constructor(@inject(LOGGER_TYPES.Logger) logger: ILogger) {
+    constructor(@inject(SOCKET_TYPES.SocketFactory) socketFactory: ISocketFactory, @inject(LOGGER_TYPES.Logger) logger: ILogger, @inject(BOTSERVICE_TYPES.BotService) botService: IBotService) {
+        this.socketFactory = socketFactory;
         this.logger = logger;
+        this.botService = botService;
 
         this.app = express();
     }
@@ -37,7 +41,7 @@ export class Server {
             } else {
                 // HTTP status 404: NotFound
                 res.status(404)
-                    .send("Not found");
+                   .send("Not found");
             }
         });
 
@@ -89,11 +93,11 @@ export class Server {
             }
         });
 
-        this.socket = new Socket(this.server, this.bot);
+        this.socket = this.socketFactory.create(this.server, this.bot);
         this.socket.initSockets();
     }
 
     private onBotInit() {
-        this.bot.getComponent<Motor>(BotComponent.Motor).reset(Config.bot.motor);
+        this.botService.ResetMotors(this.bot);
     }
 }
